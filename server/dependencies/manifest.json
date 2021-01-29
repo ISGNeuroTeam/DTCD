@@ -19,5 +19,10 @@
     "fileName": "gridstack.js",
     "version":"-",
     "type":"iife"
+  },{
+    "name":"Font-Awesome",
+    "fileName": "font-awesome.js",
+    "version":"-",
+    "type":"iife"
   }
 ]

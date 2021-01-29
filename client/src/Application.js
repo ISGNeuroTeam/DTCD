@@ -11,6 +11,7 @@ export default function Application() {
 			const Plugin = _getPluginByName(name);
 			const guid = GUIDSystem.createGUID();
 			const instance = new Plugin(guid, ...args);
+			GUIDSystem.setGUID(instance, guid);
 			return instance;
 		}
 	};
