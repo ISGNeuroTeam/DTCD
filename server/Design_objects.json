@@ -1,0 +1,111 @@
+[
+  {
+    "preview": "white",
+    "name": "light",
+    "styleVariables": {
+      "main-bg-color-panel": "#fff",
+      "secondary-bg-color-panel": "#f5f5f5",
+      "text-color-light": "#757575",
+      "text-color-dark": "#212121",
+      "identity-icon-url": "",
+      "overlay-bg-color": "#BDBDBD",
+      "divider": "#b7b7b7",
+      "detail-hover": "#e0e0e0",
+      "button": {
+        "bg-color": "#2196f3",
+        "text-color": "#fff",
+        "border-color": "#2196f3",
+        "hover": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        },
+        "focus": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        },
+        "active": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        },
+        "selected": {
+          "hover": {
+            "bg-color": "#2196f3",
+            "text-color": "#fff",
+            "border": "#2196f3"
+          }
+        }
+      }
+    }
+  },
+  {
+    "preview": "gray",
+    "name": "gray",
+    "styleVariables": {
+      "main-bg-color-panel": "#616161",
+      "secondary-bg-color-panel": "#424242",
+      "text-color-light": "#fff",
+      "text-color-dark": "#878787",
+      "identity-icon-url": "",
+      "overlay-bg-color": "#BDBDBD",
+      "divider": "#b7b7b7",
+      "detail-hover":"#555556",
+      "button": {
+        "bg-color": "#2196f3",
+        "text-color": "#fff",
+        "border-color": "#2196f3",
+        "hover": {
+          "bg-color": "#555556",
+          "text-color": "#fff",
+          "border": "#fff"
+        },
+        "focus": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        },
+        "active": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        }
+      }
+    }
+  },
+  {
+    "preview": "black",
+    "name": "dark",
+    "styleVariables": {
+      "main-bg-color-panel": "#06090f",
+      "secondary-bg-color-panel": "#0D1117",
+      "text-color-light": "#fff",
+      "text-color-dark": "#878787",
+      "identity-icon-url": "",
+      "overlay-bg-color": "#BDBDBD",
+      "divider": "#b7b7b7",
+      "detail-hover":"#555556",
+      "button": {
+        "bg-color": "#2196f3",
+        "text-color": "#fff",
+        "border-color": "#2196f3",
+        "hover": {
+          "bg-color": "#555556",
+          "text-color": "#fff",
+          "border": "#fff"
+        },
+        "focus": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        },
+        "active": {
+          "bg-color": "#fff",
+          "text-color": "#2196f3",
+          "border": "#2196f3"
+        }
+      }
+    }
+  }
+]
