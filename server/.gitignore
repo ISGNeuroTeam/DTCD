@@ -1,9 +1,0 @@
-__pycache__/
-*log.*
-venv/
-
-plugins/*
-!plugins/.gitkeep
-dependencies/*
-!dependencies/.gitkeep
-!dependencies/manifest.json

@@ -30,7 +30,7 @@ pack: build
 	echo Create archive \"$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz\"
 	cd build; tar czf ../$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz .
 
-build: ${PROJECT_NAME}/node_modules $(COMPONENTS)
+build: client/node_modules $(COMPONENTS)
 	# required section
 	echo Build!
 	$(SET_VERSION)
