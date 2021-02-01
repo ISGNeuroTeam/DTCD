@@ -54,7 +54,7 @@ clean:
 test: client/node_modules
 	# required section
 	echo "Testing..."
-	echo client
+	echo WebGUI client
 	npm run --prefix ./client test
 	
 dev: client/node_modules venv $(COMPONENTS)
@@ -69,5 +69,5 @@ venv:
 	cd ./server; ./venv/bin/pip3 install -r requirements.txt
 
 client/node_modules:
-	echo Start command: npm i
+	echo Start command for client : npm i
 	npm i --prefix ./client
