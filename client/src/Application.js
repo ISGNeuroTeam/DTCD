@@ -108,6 +108,7 @@ export default function Application() {
 										if (!_extensions[meta.target]) _extensions[meta.target] = [];
 										_extensions[meta.target].push({...meta, plugin});
 									}
+									_plugins.push({...meta, plugin});
 									break;
 								default:
 									_plugins.push({...meta, plugin});
