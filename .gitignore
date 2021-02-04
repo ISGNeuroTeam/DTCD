@@ -16,3 +16,6 @@ server/plugins/*
 server/dependencies/*
 !server/dependencies/.gitkeep
 !server/dependencies/manifest.json
+
+# vscode
+.vscode
