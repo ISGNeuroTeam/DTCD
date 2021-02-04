@@ -8,8 +8,8 @@ module.exports = {
 					{
 						paths: [
 							{
-								rootPathSuffix: './tests/__mocks__',
 								rootPathPrefix: '/',
+								rootPathSuffix: './tests/samples',
 							},
 						],
 					},

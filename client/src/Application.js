@@ -1,34 +1,34 @@
-import {GridStack} from '../tests/__mocks__/dependencies/gridstack';
 import {fillDependencies} from './utils/fill-dependencies';
 import {fillPlugins} from './utils/fill-plugins';
 
-export default function Application() {
-	const _dependencies = {};
+export default class Application {
+	constructor() {
+		this._dependencies = {};
 
-	const _plugins = [];
-	const _extensions = {};
+		this._plugins = [];
+		this._extensions = {};
 
-	const _systems = {};
+		this._systems = {};
 
-	const _guids = {};
-	let count = 0;
+		this._guids = {};
+		this._count = 0;
 
-	window.Application = this;
+		window.Application = this;
+	}
 
-	async function start() {
+	start() {
 		window.Application = this;
 
-		await fillDependencies(_dependencies);
-		await fillPlugins(_plugins, _extensions);
-
-		['LogSystem', 'EventSystem', 'StorageSystem', 'InteractionSystem', 'StyleSystem'].forEach(name => {
-			const instance = installPlugin(name);
-			_systems[name] = instance;
+		Promise.all([fillDependencies(this._dependencies), fillPlugins(this._plugins, this._extensions)]).then(() => {
+			['LogSystem', 'EventSystem', 'StorageSystem', 'InteractionSystem', 'StyleSystem'].forEach(name => {
+				const instance = this.installPlugin(name);
+				this._systems[name] = instance;
+			});
 		});
 
-		// _systems['WorkspaceSystem'] = installPlugin('WorkspaceSystem', _systems['StyleSystem']);
+		// this._systems['WorkspaceSystem'] = this.installPlugin('WorkspaceSystem', this._systems['StyleSystem']);
 
-		const eventSystem = _systems['EventSystem'];
+		const eventSystem = this._systems['EventSystem'];
 		eventSystem.subscribeByNames('ChangeWorkspaceEditMode', 'changeMode');
 		eventSystem.subscribeByNames('DefaultAddWorkspacePanel', 'defaultAddPanel');
 		eventSystem.subscribeByNames('CompactWorkspacePanel', 'compactAllPanels');
@@ -48,38 +48,38 @@ export default function Application() {
 		// 	writable: false,
 		// });
 	}
-	function installPlugin(name, ...args) {
-		const nextGUID = `guid${count}`;
-		const Plugin = getPlugin(name);
+	installPlugin(name, ...args) {
+		const nextGUID = `guid${this._count}`;
+		const Plugin = this.getPlugin(name);
 		const instance = new Plugin(nextGUID, ...args);
-		_guids[nextGUID] = instance;
-		count++;
+		this._guids[nextGUID] = instance;
+		this._count++;
 		return instance;
 	}
 
-	function uninstallPluginByGUID(guid) {
-		delete _guids[guid];
+	uninstallPluginByGUID(guid) {
+		delete this._guids[guid];
 		return true;
 	}
 
-	function uninstallPluginByInstance(instance) {
+	uninstallPluginByInstance(instance) {
 		const guid = Object.keys(_guids).find(key => _guids[key] === instance);
-		delete _guids[guid];
+		delete this._guids[guid];
 		return true;
 	}
-	function getDependence(dependenceName) {
-		return _dependencies[dependenceName].module;
+	getDependence(dependenceName) {
+		return this._dependencies[dependenceName].module;
 	}
-	function getSystem(systemName) {
-		return _systems[systemName];
+	getSystem(systemName) {
+		return this._systems[systemName];
 	}
-	function getPanels() {
-		return _plugins.filter(plg => plg.type === 'panel');
+	getPanels() {
+		return this._plugins.filter(plg => plg.type === 'panel');
 	}
 
-	function getPlugin(name) {
+	getPlugin(name) {
 		try {
-			let {plugin} = _plugins.find(plg => plg.name === name);
+			let {plugin} = this._plugins.find(plg => plg.name === name);
 			return plugin;
 		} catch (err) {
 			console.error(`Plugin ${name} not found!`);
@@ -87,15 +87,15 @@ export default function Application() {
 		}
 	}
 
-	function getExtensions(targetName) {
-		return _extensions[targetName];
+	getExtensions(targetName) {
+		return this._extensions[targetName];
 	}
 
-	this.start = start;
-	this.installPlugin = installPlugin;
-	this.getPlugin = getPlugin;
-	this.getDependence = getDependence;
-	this.getSystem = getSystem;
-	this.getPanels = getPanels;
-	this.getExtensions = getExtensions;
+	// this.start = start;
+	// this.installPlugin = installPlugin;
+	// this.getPlugin = getPlugin;
+	// this.getDependence = getDependence;
+	// this.getSystem = getSystem;
+	// this.getPanels = getPanels;
+	// this.getExtensions = getExtensions;
 }

@@ -11,6 +11,10 @@
   "keywords": [],
   "author": "",
   "license": "",
+  "activationEvents": [
+    "workspaceContains:node_modules/.bin/jest",
+    "onCommand:io.orta.jest.start"
+  ],
   "devDependencies": {
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.11",
