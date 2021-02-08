@@ -5,44 +5,63 @@ import {mockResponse} from './libs/mockResponse';
 import {dependenceList} from './samples/dependence-list';
 import {pluginList} from './samples/plugin-list';
 
-jest.mock('./../src/utils/fill-dependencies');
-jest.mock('./../src/utils/fill-plugins');
 import {fillDependencies} from './../src/utils/fill-dependencies';
 import {fillPlugins} from './../src/utils/fill-plugins';
+
+jest.mock('./../src/utils/fill-dependencies');
+jest.mock('./../src/utils/fill-plugins');
 
 describe('Application tests...', () => {
 	beforeAll(() => {
 		global.fetch = jest.fn().mockImplementation(mockResponse);
 	});
 
-	it('Properties of Application', () => {
-		const app = new Application();
-		expect(app).toMatchObject({
-			_dependencies: expect.any(Object),
-			_extensions: expect.any(Object),
-			_plugins: expect.any(Object),
-			_guids: expect.any(Object),
-			_systems: expect.any(Object),
-			_count: expect.any(Number),
-			installPlugin: expect.any(Function),
-			getDependence: expect.any(Function),
-			getExtensions: expect.any(Function),
-			getSystem: expect.any(Function),
-			getPanels: expect.any(Function),
-			getPlugin: expect.any(Function),
-			start: expect.any(Function),
+	describe('Propeties of instance', () => {
+		it('Properties of Application', () => {
+			const app = new Application();
+			expect(app).toMatchObject({
+				_dependencies: expect.any(Object),
+				_extensions: expect.any(Object),
+				_plugins: expect.any(Object),
+				_guids: expect.any(Object),
+				_systems: expect.any(Object),
+				_count: expect.any(Number),
+				_defaultSubscriptions: expect.any(Function),
+				installPlugin: expect.any(Function),
+				getDependence: expect.any(Function),
+				getExtensions: expect.any(Function),
+				getSystem: expect.any(Function),
+				getPanels: expect.any(Function),
+				getPlugin: expect.any(Function),
+				start: expect.any(Function),
+			});
+		});
+	});
+
+	describe('fillDependencies/fillPlugins functions', () => {
+		it('fillDependencies function', async () => {
+			const {fillDependencies} = jest.requireActual('../src/utils/fill-dependencies');
+			const dependencies = {};
+			await fillDependencies(dependencies);
+			expect(Object.keys(dependencies)).toEqual(dependenceList.map(dep => dep.name));
+		});
+
+		it('fillPlugins function', async () => {
+			const {fillPlugins} = jest.requireActual('../src/utils/fill-plugins');
+			const plugins = [];
+			await fillPlugins(plugins);
+			expect(plugins.map(plg => plg.fileName)).toEqual(pluginList);
 		});
 	});
 
 	describe('"start" method of Application...', () => {
-		beforeAll(() => {
+		const app = new Application();
+		const installPlugin = jest.spyOn(app, 'installPlugin').mockImplementation(jest.fn());
+		const defaultSubscriptionsMethod = jest.spyOn(app, '_defaultSubscriptions').mockImplementation(jest.fn());
+		app.start();
+		afterAll(() => {
+			installPlugin.mockClear;
 			delete window.Application;
-			const app = new Application();
-			try {
-				app.start();
-			} catch (err) {
-				return;
-			}
 		});
 
 		test('Execute "fillDependencies" function', () => {
@@ -50,37 +69,78 @@ describe('Application tests...', () => {
 		});
 
 		test('Execute "fillPlugins" function', () => {
-			jest.unmock('./../src/utils/fill-dependencies');
 			expect(fillPlugins).toHaveBeenCalled();
 		});
-	});
 
-	describe('fillDependencies/fillPlugins functions', () => {
-		it('fillDependencies function', async () => {
-			jest.unmock('./../src/utils/fill-dependencies');
-			const {fillDependencies} = require('../src/utils/fill-dependencies');
-			const dependencies = {};
-			await fillDependencies(dependencies);
-			expect(Object.keys(dependencies)).toEqual(dependenceList.map(dep => dep.name));
-		});
-
-		it('fillPlugins function', async () => {
-			jest.unmock('./../src/utils/fill-plugins');
-			const {fillPlugins} = require('../src/utils/fill-plugins');
+		test('Execute "installPlugin" method for all received "core" systems', async () => {
+			const {fillPlugins} = jest.requireActual('./../src/utils/fill-plugins');
 			const plugins = [];
 			await fillPlugins(plugins);
-			expect(plugins.map(plg => plg.fileName)).toEqual(pluginList);
+			const names = plugins.filter(plg => plg.type === 'core').map(plg => plg.name);
+			expect(installPlugin.mock.calls.map(args => args[0])).toEqual(expect.arrayContaining(names));
+		});
+
+		test('method _defaultSubscriptions of Application', () => {
+			expect(defaultSubscriptionsMethod).toHaveBeenCalled();
 		});
 	});
 
-	// describe('public methods of Application', () => {
-	// 	let app = new Application();
-	// 	beforeAll(() => {
-	// 		app.start(app);
-	// 	});
+	describe('public methods of Application', () => {
+		jest.unmock('./../src/utils/fill-dependencies');
+		jest.unmock('./../src/utils/fill-plugins');
+		jest.resetModules();
+		global.fetch = jest.fn().mockImplementation(mockResponse);
+		const Application = require('./../src/Application').default;
+		let app = new Application();
+		app.start().then();
+		afterAll(() => {
+			delete window.Application;
+		});
 
-	// 	test("app.getDependence('Vue')", () => {
-	// 		expect(app.getDependence.call(app, 'Vue')).toBeDefined();
-	// 	});
-	// });
+		test("Application.getDependence('Vue')", () => {
+			expect(app.getDependence('Vue')).toEqual(require('./samples/dependencies/vue'));
+		});
+
+		test('Application.getSystem. Getting first system from /get-plugin-list', async () => {
+			const {fillPlugins} = jest.requireActual('./../src/utils/fill-plugins');
+			const plugins = [];
+			await fillPlugins(plugins);
+			const corePlugins = plugins.filter(plg => plg.type === 'core');
+
+			const testSystem = app.getSystem(corePlugins[0].name);
+			expect(testSystem.constructor.getRegistrationMeta()).toEqual(corePlugins[0].plugin.getRegistrationMeta());
+		});
+		test('Application.getPanels', async () => {
+			const {fillPlugins} = jest.requireActual('./../src/utils/fill-plugins');
+			const plugins = [];
+			await fillPlugins(plugins);
+			const panelPlugins = plugins.filter(plg => plg.type === 'panel');
+			expect(app.getPanels()).toEqual(panelPlugins);
+		});
+		test('Application.getPlugin', async () => {
+			const {fillPlugins} = jest.requireActual('./../src/utils/fill-plugins');
+			const plugins = [];
+			await fillPlugins(plugins);
+
+			expect(app.getPlugin(plugins[0].name)).toEqual(plugins[0].plugin);
+		});
+		test('Application.getExtensions', async () => {
+			const {fillPlugins} = jest.requireActual('./../src/utils/fill-plugins');
+			const plugins = [];
+			await fillPlugins(plugins);
+			const extensionArray = plugins.filter(plg => {
+				if (Array.isArray(plg.target) && plg.target.includes(plugins[0].name)) {
+					return true;
+				} else if (plg.target === plugins[0].name) {
+					return true;
+				} else {
+					false;
+				}
+			});
+			const onCheck = extensionArray.length ? extensionArray : undefined;
+
+			expect(app.getExtensions(plugins[0].name)).toEqual(onCheck);
+		});
+		// test('Application.getInstance', () => {});
+	});
 });

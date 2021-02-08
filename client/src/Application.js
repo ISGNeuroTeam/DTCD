@@ -16,38 +16,25 @@ export default class Application {
 		window.Application = this;
 	}
 
-	start() {
-		window.Application = this;
-
-		Promise.all([fillDependencies(this._dependencies), fillPlugins(this._plugins, this._extensions)]).then(() => {
-			['LogSystem', 'EventSystem', 'StorageSystem', 'InteractionSystem', 'StyleSystem'].forEach(name => {
-				const instance = this.installPlugin(name);
-				this._systems[name] = instance;
-			});
+	async start() {
+		await Promise.all([fillDependencies(this._dependencies), fillPlugins(this._plugins, this._extensions)]).then(() => {
+			['LogSystem', 'EventSystem', 'StorageSystem', 'InteractionSystem', 'StyleSystem', 'WorkspaceSystem'].forEach(
+				name => {
+					const instance = this.installPlugin(name);
+					this._systems[name] = instance;
+				}
+			);
 		});
+		this._defaultSubscriptions();
+	}
 
-		// this._systems['WorkspaceSystem'] = this.installPlugin('WorkspaceSystem', this._systems['StyleSystem']);
-
-		const eventSystem = this._systems['EventSystem'];
+	_defaultSubscriptions() {
+		const eventSystem = this.getSystem('EventSystem');
 		eventSystem.subscribeByNames('ChangeWorkspaceEditMode', 'changeMode');
 		eventSystem.subscribeByNames('DefaultAddWorkspacePanel', 'defaultAddPanel');
 		eventSystem.subscribeByNames('CompactWorkspacePanel', 'compactAllPanels');
-
-		// for (let systemName in _systems) {
-		// 	Object.defineProperty(this, systemName, {
-		// 		value: _systems[systemName],
-		// 		enumerable: false,
-		// 		configurable: false,
-		// 		writable: false,
-		// 	});
-		// }
-		// Object.defineProperty(window, 'Application', {
-		// 	value: this,
-		// 	enumerable: false,
-		// 	configurable: false,
-		// 	writable: false,
-		// });
 	}
+
 	installPlugin(name, ...args) {
 		const nextGUID = `guid${this._count}`;
 		const Plugin = this.getPlugin(name);
@@ -63,7 +50,7 @@ export default class Application {
 	}
 
 	uninstallPluginByInstance(instance) {
-		const guid = Object.keys(_guids).find(key => _guids[key] === instance);
+		const guid = Object.keys(this._guids).find(key => this._guids[key] === instance);
 		delete this._guids[guid];
 		return true;
 	}
@@ -76,10 +63,11 @@ export default class Application {
 	getPanels() {
 		return this._plugins.filter(plg => plg.type === 'panel');
 	}
-
-	getPlugin(name) {
+	getPlugin(name, type = false) {
 		try {
-			let {plugin} = this._plugins.find(plg => plg.name === name);
+			let {plugin} = this._plugins.find(plg => {
+				return type ? plg.name === name && plg.type === type : plg.name === name;
+			});
 			return plugin;
 		} catch (err) {
 			console.error(`Plugin ${name} not found!`);
@@ -89,6 +77,10 @@ export default class Application {
 
 	getExtensions(targetName) {
 		return this._extensions[targetName];
+	}
+
+	getInstance(guid) {
+		return this._guids[guid];
 	}
 
 	// this.start = start;
