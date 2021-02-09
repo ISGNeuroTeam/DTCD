@@ -1,2 +1,21 @@
-tests/
 public/
+build/
+
+# client
+client/node_modules/
+client/dist/
+client/*-lock*
+
+# server 
+server/__pycache__/
+server/*log.*
+server/venv/
+
+server/plugins/*
+!server/plugins/.gitkeep
+server/dependencies/*
+!server/dependencies/.gitkeep
+!server/dependencies/manifest.json
+
+# vscode
+.vscode
