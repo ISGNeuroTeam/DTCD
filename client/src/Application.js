@@ -82,12 +82,4 @@ export default class Application {
 	getInstance(guid) {
 		return this._guids[guid];
 	}
-
-	// this.start = start;
-	// this.installPlugin = installPlugin;
-	// this.getPlugin = getPlugin;
-	// this.getDependence = getDependence;
-	// this.getSystem = getSystem;
-	// this.getPanels = getPanels;
-	// this.getExtensions = getExtensions;
 }
