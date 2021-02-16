@@ -5,18 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.3]
-client:
+## [0.2.0] - 2021-02-16
+### Changed
+- Build process
+
+### Added
+- [Jenkinsfile](Jenkinsfile) 
+
+### Fixed
+- [LICENSE.md](LICENSE.md) file text content
+
+
+
+## [0.1.3] - 2021-02-04
+### Fixed
 - temporarily Application as class
 - guid conunting into Application class
 - initial tests
 - added uninstallPluginByInstance, uninstallPluginByGUID methods
 - fillDependencies and fillPlugins as separate functions
-
-server:
 - deleted GIS_data.json
 
-## [0.1.2]
+## [0.1.2] - 2021-02-02
 ### Added
 client:
 - getExtension, getSystem, getDependence public methods
@@ -28,7 +38,7 @@ server:
 - manifest.json in dependencies
 
 
-## [0.1.1]
+## [0.1.1] - 2020-11-27
 ### Removed
 - axios
 - serve plugin of client dev-server
@@ -41,9 +51,8 @@ server:
 - static serve on ./public
 - GIS data end-point
 
-## [0.1.0]
+## [0.1.0] - 2020-10-20
 ### Added
-
 - Inited Repo WebGUI
 - Inited server directory
 - Added gridstack to project

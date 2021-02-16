@@ -7,8 +7,8 @@ Required section:
 Addition section:
 endef
 
-PROJECT_NAME = WebGUI
-MOCK_SERVER_NAME = WebGUI-server
+PROJECT_NAME = DTCD
+MOCK_SERVER_NAME = DTCD-server
 
 GENERATE_VERSION = $(shell jq .version ./$(PROJECT_NAME)/package.json )
 GENERATE_BRANCH = $(shell git name-rev $$(git rev-parse HEAD) | cut -d\  -f2 | sed -re 's/^(remotes\/)?origin\///' | tr '/' '_')
@@ -54,7 +54,7 @@ clean:
 test: $(PROJECT_NAME)/node_modules
 	# required section
 	echo "Testing..."
-	echo WebGUI
+	echo DTCD
 	npm run --prefix ./$(PROJECT_NAME) test
 	
 dev: $(PROJECT_NAME)/node_modules venv $(COMPONENTS)

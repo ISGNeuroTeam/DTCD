@@ -2,9 +2,9 @@ public/
 build/
 
 # client
-WebGUI/node_modules/
-WebGUI/dist/
-WebGUI/*-lock*
+DTCD/node_modules/
+DTCD/dist/
+DTCD/*-lock*
 
 # server 
 server/__pycache__/
