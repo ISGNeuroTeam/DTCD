@@ -37,7 +37,7 @@ build: $(PROJECT_NAME)/node_modules $(COMPONENTS)
 	echo Start command: npm run build
 	npm run build --prefix ./$(PROJECT_NAME)
 	mkdir build
-	mkdir build/$(PROJECT_NAME)
+	mkdir build/public
 	cp -r ./$(PROJECT_NAME)/dist/* ./build/public
 	cp README.md build/
 	cp CHANGELOG.md build/
