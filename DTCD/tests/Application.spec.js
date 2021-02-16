@@ -5,8 +5,8 @@ import {mockResponse} from './libs/mockResponse';
 import {dependenceList} from './samples/dependence-list';
 import {pluginList} from './samples/plugin-list';
 
-import {fillDependencies} from './../src/utils/fill-dependencies';
-import {fillPlugins} from './../src/utils/fill-plugins';
+import {fillDependencies} from '../src/utils/fill-dependencies';
+import {fillPlugins} from '../src/utils/fill-plugins';
 
 jest.mock('./../src/utils/fill-dependencies');
 jest.mock('./../src/utils/fill-plugins');
@@ -90,7 +90,7 @@ describe('Application tests...', () => {
 		jest.unmock('./../src/utils/fill-plugins');
 		jest.resetModules();
 		global.fetch = jest.fn().mockImplementation(mockResponse);
-		const Application = require('./../src/Application').default;
+		const Application = require('../src/Application').default;
 		let app = new Application();
 		app.start().then();
 		afterAll(() => {

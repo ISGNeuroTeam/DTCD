@@ -6,16 +6,29 @@ It's web-interface for editing of System Object Model (SOM), OMDS.
 
 ### Prerequisites
 ```
-- Node.js LTS version (upper 12.0)
+- Node.js v.14.x.x
 ```
 With mock_server:
 ```
-- Python v3.6 and upper
+- Python v3.8
 - Virtualenv, tool to create isolated Python environments
 
 ```
 
 ### Installing
+
+For production mode!
+
+You need to place 2 following folders in public folder:
+- plugins
+- dependencies
+
+Put core plugins of application and MenuPanel plugin in "plugins" directory
+
+Put dependencies of application in "dependencies" directory
+
+---
+For development mode!
 
 To start working with the application only on local machine in development mode, 
 you need to install all dependencies from ./client/package.json and from ./server/requirements.txt 
@@ -23,7 +36,7 @@ and start client-side application with mock-server application.
 To do this, enter the next commands in the terminal.
 
 * Installing dependencies for client-side application and start them.
-> 1. `cd ./client`
+> 1. `cd ./WebGUI`
 > 2. `npm i`
 > 3. `npm run dev`
 
@@ -37,27 +50,32 @@ To do this, enter the next commands in the terminal.
 Also you can use makefile for this 
 `make dev
 `
-
-
 > At the end you will see starting of client-side app in terminal
 
 ## Running the tests
-`npm run test` from DataCAD directory or `make test`
+`npm run test` from client directory or `make test`
 
-### End to end test
-```
-In developing
-```
-
-### coding style tests
+## Create build package
 
 ```
-In developing
+make pack
+```
+
+## Clear dependencies
+
+```
+make clear
 ```
 
 ## Deployment
+
+Create build package, unpack and move it to public directory by the following command:
 ```
-In developing
+tar -zxf WebGUI-*.tar.gz
+```
+After, you need serve public directory and remove archive by following command
+```
+rm WebGUI-*.tar.gz
 ```
 
 ## Built With

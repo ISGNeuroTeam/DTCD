@@ -2,9 +2,9 @@ public/
 build/
 
 # client
-client/node_modules/
-client/dist/
-client/*-lock*
+DTCD/node_modules/
+DTCD/dist/
+DTCD/*-lock*
 
 # server 
 server/__pycache__/
