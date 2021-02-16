@@ -10,7 +10,7 @@ endef
 PROJECT_NAME = WebGUI
 MOCK_SERVER_NAME = WebGUI-server
 
-GENERATE_VERSION = $(shell jq .version ./client/package.json )
+GENERATE_VERSION = $(shell jq .version ./$(PROJECT_NAME)/package.json )
 GENERATE_BRANCH = $(shell git name-rev $$(git rev-parse HEAD) | cut -d\  -f2 | sed -re 's/^(remotes\/)?origin\///' | tr '/' '_')
 
 SET_VERSION = $(eval VERSION=$(GENERATE_VERSION))
@@ -30,15 +30,15 @@ pack: build
 	echo Create archive \"$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz\"
 	cd build; tar czf ../$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz .
 
-build: client/node_modules $(COMPONENTS)
+build: $(PROJECT_NAME)/node_modules $(COMPONENTS)
 	# required section
 	echo Build!
 	$(SET_VERSION)
 	echo Start command: npm run build
-	npm run build --prefix ./client
+	npm run build --prefix ./$(PROJECT_NAME)
 	mkdir build
-	mkdir build/client
-	cp -r ./client/dist/* ./build/client
+	mkdir build/$(PROJECT_NAME)
+	cp -r ./$(PROJECT_NAME)/dist/* ./build/public
 	cp README.md build/
 	cp CHANGELOG.md build/
 	cp LICENSE.md build/
@@ -47,27 +47,27 @@ clean:
 	# required section"
 	$(SET_VERSION)
 	$(SET_PROJECT_NAME)
-	rm -rf build ./client/dist ./client/node_modules/ ./*-lock.* ./client/*-lock.* $(PROJECT_NAME)-*.tar.gz \
+	rm -rf build ./$(PROJECT_NAME)/dist ./$(PROJECT_NAME)/node_modules/ ./*-lock.* ./$(PROJECT_NAME)/*-lock.* $(PROJECT_NAME)-*.tar.gz \
 	./server/__pycache__ ./server/venv ./server/*_log.* \
 	./public
 
-test: client/node_modules
+test: $(PROJECT_NAME)/node_modules
 	# required section
 	echo "Testing..."
-	echo WebGUI client
-	npm run --prefix ./client test
+	echo WebGUI
+	npm run --prefix ./$(PROJECT_NAME) test
 	
-dev: client/node_modules venv $(COMPONENTS)
+dev: $(PROJECT_NAME)/node_modules venv $(COMPONENTS)
 	echo Development mode!
-	npm run build --prefix ./client
+	npm run build --prefix ./$(PROJECT_NAME)
 	cd ./server; ./venv/bin/python  main.py > session_log.txt &
-	npm run dev --prefix ./client
+	npm run dev --prefix ./$(PROJECT_NAME)
 
 venv:
 	echo Start installing virtualenv
 	python3 -m venv ./server/venv
 	cd ./server; ./venv/bin/pip3 install -r requirements.txt
 
-client/node_modules:
-	echo Start command for client : npm i
-	npm i --prefix ./client
+$(PROJECT_NAME)/node_modules:
+	echo Start command for $(PROJECT_NAME) : npm i
+	npm i --prefix ./$(PROJECT_NAME)
