@@ -1,4 +1,4 @@
-# WebGUI
+# DTCD
 
 It's web-interface for editing of System Object Model (SOM), OMDS.
 
@@ -36,7 +36,7 @@ and start client-side application with mock-server application.
 To do this, enter the next commands in the terminal.
 
 * Installing dependencies for client-side application and start them.
-> 1. `cd ./WebGUI`
+> 1. `cd ./DTCD`
 > 2. `npm i`
 > 3. `npm run dev`
 
@@ -71,11 +71,11 @@ make clear
 
 Create build package, unpack and move it to public directory by the following command:
 ```
-tar -zxf WebGUI-*.tar.gz
+tar -zxf DTCD-*.tar.gz
 ```
 After, you need serve public directory and remove archive by following command
 ```
-rm WebGUI-*.tar.gz
+rm DTCD-*.tar.gz
 ```
 
 ## Built With
