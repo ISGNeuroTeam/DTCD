@@ -1,7 +1,7 @@
 import os
 import json
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -49,10 +49,21 @@ def give_bounds():
         return data
 
 @app.get("/get-design-objects")
-def give_bounds():
+def design_obejct():
     with open("./Design_objects.json","r") as file:
         data = json.load(file)
         return data
+
+@app.get("/logs/configuration")
+def log_config():
+    with open("./log_configuration.json","r") as file:
+        data = json.load(file)
+        return data
+
+@app.post("/logs/save")
+def logs_save(logs: list = Body(...)):
+    print(logs)
+    return 'saved!'
 
 if not os.path.isdir("./plugins"):
     os.mkdir("./plugins")
