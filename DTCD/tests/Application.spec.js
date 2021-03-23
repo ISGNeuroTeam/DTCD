@@ -20,13 +20,6 @@ describe('Application tests...', () => {
 		it('Properties of Application', () => {
 			const app = new Application();
 			expect(app).toMatchObject({
-				_dependencies: expect.any(Object),
-				_extensions: expect.any(Object),
-				_plugins: expect.any(Object),
-				_guids: expect.any(Object),
-				_systems: expect.any(Object),
-				_count: expect.any(Number),
-				_defaultSubscriptions: expect.any(Function),
 				installPlugin: expect.any(Function),
 				getDependence: expect.any(Function),
 				getExtensions: expect.any(Function),
@@ -56,8 +49,11 @@ describe('Application tests...', () => {
 
 	describe('"start" method of Application...', () => {
 		const app = new Application();
-		const installPlugin = jest.spyOn(app, 'installPlugin').mockImplementation(jest.fn());
-		const defaultSubscriptionsMethod = jest.spyOn(app, '_defaultSubscriptions').mockImplementation(jest.fn());
+		const methodInitInPlugin = jest.fn();
+		const subscribeByNames = jest.fn();
+		const installPlugin = jest.spyOn(app, 'installPlugin').mockImplementation(() => {
+			return {subscribeByNames, init: methodInitInPlugin};
+		});
 		app.start();
 		afterAll(() => {
 			installPlugin.mockClear;
@@ -79,9 +75,8 @@ describe('Application tests...', () => {
 			const names = plugins.filter(plg => plg.type === 'core').map(plg => plg.name);
 			expect(installPlugin.mock.calls.map(args => args[0])).toEqual(expect.arrayContaining(names));
 		});
-
-		test('method _defaultSubscriptions of Application', () => {
-			expect(defaultSubscriptionsMethod).toHaveBeenCalled();
+		test('invoke defaultSubscribe method of eventSystem in start method 3 times', () => {
+			expect(subscribeByNames).toBeCalledTimes(3);
 		});
 	});
 
@@ -141,6 +136,5 @@ describe('Application tests...', () => {
 
 			expect(app.getExtensions(plugins[0].name)).toEqual(onCheck);
 		});
-		// test('Application.getInstance', () => {});
 	});
 });
