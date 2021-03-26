@@ -5,16 +5,19 @@ import livereload from 'rollup-plugin-livereload';
 import replace from '@rollup/plugin-replace';
 import html from '@rollup/plugin-html';
 import copy from 'rollup-plugin-copy';
+import babel from '@rollup/plugin-babel';
 
 const watch = Boolean(process.env.ROLLUP_WATCH) || Boolean(process.env.LIVERELOAD);
 
 const plugins = [
 	//for axios
 	nodeResolve({jsnext: true, preferBuiltins: true, browser: true}),
+	babel({babelHelpers: 'bundled'}),
 	//for require, module.exports syntax
 	commonjs(),
 	postcss(),
 	replace({
+		preventAssignment: true,
 		'process.env.NODE_ENV': JSON.stringify('development'),
 		'process.env.VUE_ENV': JSON.stringify('browser'),
 	}),

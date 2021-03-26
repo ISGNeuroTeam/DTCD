@@ -72,7 +72,6 @@ if not os.path.isdir("./../public"):
     os.mkdir("./../public")
 
 app.mount("/plugins", StaticFiles(directory="./plugins"))
-app.mount("/dependencies", StaticFiles(directory="./dependencies"))
 app.mount("/", StaticFiles(directory="./../public"))
 
 if __name__ == "__main__":
