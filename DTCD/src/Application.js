@@ -1,97 +1,198 @@
-import { fillDependencies } from './utils/fill-dependencies';
-import { fillPlugins } from './utils/fill-plugins';
-
 export default class Application {
-  constructor() {
-    this._dependencies = {};
+	#dependencies;
+	#plugins;
+	#extensions;
+	#systems;
+	#guids;
+	#count;
 
-    this._plugins = [];
-    this._extensions = {};
+	constructor() {
+		this.#dependencies = {};
 
-    this._systems = {};
+		this.#plugins = [];
+		this.#extensions = {};
 
-    this._guids = {};
-    this._count = 0;
+		this.#systems = {};
 
-    window.Application = this;
-  }
+		this.#guids = {};
+		this.#count = 0;
 
-  async start() {
-    await Promise.all([
-      fillDependencies(this._dependencies),
-      fillPlugins(this._plugins, this._extensions),
-    ]).then(async () => {
-      let systems = [
-        'LogSystem',
-        'EventSystem',
-        'StorageSystem',
-        'InteractionSystem',
-        'StyleSystem',
-        'WorkspaceSystem',
-      ];
-      for (let i = 0; i < systems.length; i++) {
-        const instance = this.installPlugin(systems[i]);
-        if (instance.init) {
-          await instance.init();
-        }
-        this._systems[systems[i]] = instance;
-      }
-    });
-    this._defaultSubscriptions();
-  }
+		window.Application = this;
+	}
 
-  _defaultSubscriptions() {
-    const eventSystem = this.getSystem('EventSystem');
-    eventSystem.subscribeByNames('ChangeWorkspaceEditMode', 'changeMode');
-    eventSystem.subscribeByNames('DefaultAddWorkspacePanel', 'defaultAddPanel');
-    eventSystem.subscribeByNames('CompactWorkspacePanel', 'compactAllPanels');
-  }
+	async start() {
+		await this.#fillPlugins();
 
-  installPlugin(name, ...args) {
-    const nextGUID = `guid${this._count}`;
-    const Plugin = this.getPlugin(name);
-    const instance = new Plugin(nextGUID, ...args);
-    this._guids[nextGUID] = instance;
-    this._count++;
-    return instance;
-  }
+		await this.#fillDependencies();
 
-  uninstallPluginByGUID(guid) {
-    delete this._guids[guid];
-    return true;
-  }
+		let systems = this.#plugins
+			.filter(plg => plg.type === 'core')
+			.sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority)
+			.map(plg => plg.name);
 
-  uninstallPluginByInstance(instance) {
-    const guid = Object.keys(this._guids).find(key => this._guids[key] === instance);
-    delete this._guids[guid];
-    return true;
-  }
-  getDependence(dependenceName) {
-    return this._dependencies[dependenceName].module;
-  }
-  getSystem(systemName) {
-    return this._systems[systemName];
-  }
-  getPanels() {
-    return this._plugins.filter(plg => plg.type === 'panel');
-  }
-  getPlugin(name, type = false) {
-    try {
-      let { plugin } = this._plugins.find(plg => {
-        return type ? plg.name === name && plg.type === type : plg.name === name;
-      });
-      return plugin;
-    } catch (err) {
-      console.error(`Plugin ${name} not found!`);
-      throw new Error(err);
-    }
-  }
+		for (let i = 0; i < systems.length; i++) {
+			const instance = this.installPlugin(systems[i]);
+			if (instance.init) {
+				await instance.init();
+			}
+			this.#systems[systems[i]] = instance;
+		}
+		this.#defaultSubscriptions();
+	}
 
-  getExtensions(targetName) {
-    return this._extensions[targetName];
-  }
+	async #fillPlugins() {
+		// Getting list of all plugins
+		const pluginList = await (await fetch('/plugins/plugins.json')).json();
 
-  getInstance(guid) {
-    return this._guids[guid];
-  }
+		// Getting each module from server as module
+		const modules = await Promise.all(pluginList.map(pathToFile => import('/plugins/' + pathToFile)));
+
+		// Plugin is what with the getRegistrationMeta method
+		modules.forEach((module, index) => {
+			let isPlugin = false;
+
+			for (let key in module) {
+				if (module[key].getRegistrationMeta) {
+					// set flag isPlugin on module
+					isPlugin = true;
+
+					const plugin = module[key];
+					const meta = plugin.getRegistrationMeta();
+					switch (meta.type) {
+						// If type of plugin is extension add it to private property #extensions of class.
+						case 'extension':
+							// Target property in meta of extensions may be Array for several plugins or String for single plugin.
+							if (Array.isArray(meta.target)) {
+								for (let target of meta.target) {
+									if (!this.#extensions[target]) this.#extensions[target] = [];
+									this.#extensions[target].push({...meta, plugin});
+								}
+							} else {
+								if (!this.#extensions[meta.target]) this.#extensions[meta.target] = [];
+								this.#extensions[meta.target].push({...meta, plugin});
+							}
+						default:
+							// In #plugins to add all plugins regardless of type
+							this.#plugins.push({...meta, plugin, path: pluginList[index]});
+							break;
+					}
+				}
+			}
+			if (!isPlugin) console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
+		});
+	}
+
+	async #fillDependencies() {
+		// Getting dependencies from all plugins, that with "withDependencies" flag in meta
+		for (let index = 0; index < this.#plugins.length; index++) {
+			let pluginObject = this.#plugins[index];
+			// Check flag
+			if (pluginObject.withDependencies) {
+				// Gettign path to directory wit plugin
+				const splittedRelativePath = pluginObject.path.split('/');
+				if (splittedRelativePath[0] === '.' || '') splittedRelativePath.shift();
+
+				// Getting splitted path with static directory of plugins
+				const pathToPlgDir = ['/plugins', ...splittedRelativePath].slice(0, -1);
+
+				// First we get manifest.json with description of dependencies
+				let manifest = await (await fetch([...pathToPlgDir, 'manifest.json'].join('/'))).json();
+
+				for (let dep of manifest) {
+					/*
+					Structure of #dependencies property of Application class:
+					{
+						<name of plugin>: {
+							<type-of-module>:{
+								<version>:<module>
+							}
+						}
+					}*/
+
+					if (!this.#dependencies[dep.name]) this.#dependencies[dep.name] = {};
+					const dependence = this.#dependencies[dep.name];
+					const pathToDependence = [...pathToPlgDir, 'dependencies', dep.fileName].join('/');
+					if (!dependence[dep.type]) dependence[dep.type] = {};
+					if (!dependence[dep.type][dep.version]) dependence[dep.type][dep.version] = await import(pathToDependence);
+				}
+			}
+		}
+	}
+
+	#defaultSubscriptions() {
+		const eventSystem = this.getSystem('EventSystem');
+		eventSystem.subscribeByNames('ChangeWorkspaceEditMode', 'changeMode');
+		eventSystem.subscribeByNames('DefaultAddWorkspacePanel', 'defaultAddPanel');
+		eventSystem.subscribeByNames('CompactWorkspacePanel', 'compactAllPanels');
+	}
+
+	// ---- PUBLIC METHODS ----
+
+	installPlugin(name, ...args) {
+		const nextGUID = `guid${this.#count}`;
+		const Plugin = this.getPlugin(name);
+		const instance = new Plugin(nextGUID, ...args);
+		this.#guids[nextGUID] = instance;
+		this.#count++;
+		return instance;
+	}
+
+	uninstallPluginByGUID(guid) {
+		delete this.#guids[guid];
+		return true;
+	}
+
+	uninstallPluginByInstance(instance) {
+		const guid = Object.keys(this.#guids).find(key => this.#guids[key] === instance);
+		delete this.#guids[guid];
+		return true;
+	}
+
+	getDependence(name, type, version) {
+		let module;
+		let autoVersion;
+		let autoType;
+		try {
+			if (version) {
+				module = this.#dependencies[name][type][version];
+			} else if (type) {
+				autoVersion = Object.keys(this.#dependencies[name][type])[0];
+				module = this.#dependencies[name][type][autoVersion];
+			} else if (name) {
+				autoType = 'esm';
+				autoVersion = Object.keys(this.#dependencies[name][autoType])[0];
+				module = this.#dependencies[name][autoType][autoVersion];
+			} else {
+				throw new Error('No name param in getDependence');
+			}
+			return module;
+		} catch (e) {
+			throw new Error(`Dependence ${name} not found!`);
+		}
+	}
+	getSystem(systemName) {
+		return this.#systems[systemName];
+	}
+	getPanels() {
+		return this.#plugins.filter(plg => plg.type === 'panel');
+	}
+	getPlugin(name, type = false) {
+		try {
+			let {plugin} = this.#plugins.find(plg => {
+				return type ? plg.name === name && plg.type === type : plg.name === name;
+			});
+			return plugin;
+		} catch (err) {
+			console.error(`Plugin ${name} not found!`);
+			throw new Error(err);
+		}
+	}
+
+	getExtensions(targetName) {
+		return this.#extensions[targetName];
+	}
+
+	getInstance(guid) {
+		return this.#guids[guid];
+	}
 }

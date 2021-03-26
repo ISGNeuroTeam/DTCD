@@ -12,10 +12,7 @@ server/*log.*
 server/venv/
 
 server/plugins/*
-!server/plugins/.gitkeep
-server/dependencies/*
-!server/dependencies/.gitkeep
-!server/dependencies/manifest.json
+!server/plugins/plugins.json
 
 # vscode
 .vscode
