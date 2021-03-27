@@ -16,3 +16,6 @@ server/plugins/*
 
 # vscode
 .vscode
+
+# logs
+*.log
