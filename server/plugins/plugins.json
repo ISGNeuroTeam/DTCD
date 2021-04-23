@@ -1,9 +1,0 @@
-[
-  "./DTCD-LogSystem/LogSystem.js", 
-  "./DTCD-EventSystem/EventSystem.js", 
-  "./DTCD-StorageSystem/StorageSystem.js", 
-  "./DTCD-StyleSystem/StyleSystem.js", 
-  "./DTCD-WorkspaceSystem/WorkspaceSystem.js", 
-  "./DTCD-InteractionSystem/InteractionSystem.js",  
-  "./DTCD-MenuPanel/MenuPanel.js"
-]

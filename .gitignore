@@ -10,6 +10,7 @@ DTCD/*-lock*
 server/__pycache__/
 server/*log.*
 server/venv/
+server/graphs
 
 server/plugins/*
 !server/plugins/plugins.json
