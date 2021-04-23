@@ -13,7 +13,7 @@ server/venv/
 server/graphs
 
 server/plugins/*
-!server/plugins/plugins.json
+server/plugins/.gitkeep
 
 # vscode
 .vscode
