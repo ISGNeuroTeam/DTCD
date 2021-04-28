@@ -85,13 +85,13 @@ The order of installation of core plugins occurs depending on the priorities set
 If the priority in different core plugins is equal, then the first in the list of all plugins will be set first
 
 
-LogSystem - 7
-EventSystem - 6
-InteractionSystem - 4
-DataSourceSystem - 3.5
-StorageSystem - 3
-StyleSystem - 3
-WorkspaceSystem - 2
+- LogSystem - 7
+- EventSystem - 6
+- InteractionSystem - 4
+- DataSourceSystem - 3.5
+- StorageSystem - 3
+- StyleSystem - 3
+- WorkspaceSystem - 2
 
 
 ## Built With
