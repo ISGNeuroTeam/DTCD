@@ -81,11 +81,11 @@ rm DTCD-*.tar.gz
 ## Core system plugins installation priorities
 
 After downloading the plugins to the application, the core plugins are installed first.
-The order of installation of core plugins occurs depending on the priorities set in the "priority" property of "getRegistrationMeta" in each core plugin.
+The order of installation of core plugins occurs depending on the priorities set in the "priority" property of "getRegistrationMeta" in each core plugin, according to the principle: "the higher the priority - the earlier the plugin is installed".
 If the priority in different core plugins is equal, then the first in the list of all plugins will be set first
 
-| Core plugins | Priority |
-|--------------|----------|
+|Core plugins|Priority|
+|------------|--------|
 |LogSystem | 7 |
 |EventSystem  | 6 |
 |InteractionSystem  | 4 |
