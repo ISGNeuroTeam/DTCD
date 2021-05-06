@@ -11,9 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 server:
 
--added endpoints for LogSystem
+- added CRUD endpoints for LiveDash
+- added endpoints for LogSystem
+
+client:
+
+- added list of parameters in getDependence method of Application(now is: name, type, version)
+- rollup plugin-babel
+- the way LogSystem installs
 
 ### Changed
+
+server:
+
+- get list of plugins by "os.listdir"
 
 client:
 

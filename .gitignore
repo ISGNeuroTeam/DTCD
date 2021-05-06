@@ -10,9 +10,11 @@ DTCD/*-lock*
 server/__pycache__/
 server/*log.*
 server/venv/
+server/graphs/*
+!server/graphs/.gitkeep
 
 server/plugins/*
-!server/plugins/plugins.json
+!server/plugins/.gitkeep
 
 # vscode
 .vscode
