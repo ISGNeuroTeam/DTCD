@@ -50,13 +50,13 @@ def read_dependencies_manifest():
 
 
 #logs
-@app.get("/logs/configuration")
+@app.get("/v2/logs/configuration")
 def log_config():
     with open("./log_configuration.json","r") as file:
         data = json.load(file)
         return data
 
-@app.post("/logs/save")
+@app.post("/v2/logs/save")
 def logs_save(logs: list = Body(...)):
     with open("./calc_log.txt",'w') as file:
         file.write(str(logs))
