@@ -87,6 +87,7 @@ def save_graph(graphs: list = Body(...)):
 def update_graph(graphs: list = Body(...)):
     count = 0
     file_list = os.listdir("./graphs")
+    file_list.remove(".gitkeep")
     for graph in graphs:
         if file_list[graph["id"]]:
             if "content" in graph:
@@ -106,6 +107,7 @@ def update_graph(graphs: list = Body(...)):
 def delete_graph(ids: list = Body(...)):
     print(ids)
     file_list = os.listdir("./graphs")
+    file_list.remove(".gitkeep")
     count=0
     for id in ids:
         os.remove("./graphs/%s" % file_list[id])
@@ -117,15 +119,17 @@ def delete_graph(ids: list = Body(...)):
 
 @app.get("/graphContent/load")
 def load_graph(id: int = 0):
-    files_list = os.listdir("./graphs")
-    with open("./graphs/%s" % files_list[id], 'r') as file:
+    file_list = os.listdir("./graphs")
+    file_list.remove(".gitkeep")
+    with open("./graphs/%s" % file_list[id], 'r') as file:
         content = file.read()
-    return {"id": id, "name": files_list[id], "content": content, "status": "SUCCESS"}
+    return {"id": id, "name": file_list[id], "content": content, "status": "SUCCESS"}
 
 @app.get("/graph/list")
 def graph_list():
-    files_list = os.listdir("./graphs")
-    return [ {"name": file_name, "id": index} for index, file_name in enumerate(files_list)]
+    file_list = os.listdir("./graphs")
+    file_list.remove(".gitkeep")
+    return [ {"name": file_name, "id": index} for index, file_name in enumerate(file_list)]
 
 # GIS
 @app.get("/get-gis-data")

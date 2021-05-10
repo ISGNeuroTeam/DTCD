@@ -11,11 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 server:
 
-- added CRUD endpoints for LiveDash
-- added endpoints for LogSystem
+- .gitkeep to graphs directory
+- CRUD endpoints for LiveDash
+- endpoints for LogSystem
 
 client:
 
+- installExtension public method
+- getGUID public method 
 - added list of parameters in getDependence method of Application(now is: name, type, version)
 - rollup plugin-babel
 - the way LogSystem installs
