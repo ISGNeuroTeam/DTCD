@@ -134,10 +134,20 @@ export default class Application {
 
   installPlugin(name, ...args) {
     const nextGUID = `guid${this.#count}`;
+    this.#count++; // increment here because when installing the plugin, extensions with their guids can be installed
     const Plugin = this.getPlugin(name);
     const instance = new Plugin(nextGUID, ...args);
     this.#guids[nextGUID] = instance;
+    return instance;
+  }
+
+  installExtension(target, pluginName, ...args) {
+    const nextGUID = `guid${this.#count}`;
     this.#count++;
+    const targetExtensionList = this.#extensions[target];
+    const {plugin: Plugin} = targetExtensionList.find(extPlg => extPlg.name === pluginName);
+    const instance = new Plugin(nextGUID, ...args);
+    this.#guids[nextGUID] = instance;
     return instance;
   }
 
@@ -198,5 +208,9 @@ export default class Application {
 
   getInstance(guid) {
     return this.#guids[guid];
+  }
+
+  getGUID(instance) {
+    return Object.keys(this.#guids).find(guid => this.#guids[guid] === instance);
   }
 }
