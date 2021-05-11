@@ -5,6 +5,7 @@ export default class Application {
   #systems;
   #guids;
   #count;
+  #autocomplete;
 
   constructor() {
     this.#dependencies = {};
@@ -16,8 +17,13 @@ export default class Application {
 
     this.#guids = {};
     this.#count = 0;
+    this.#autocomplete = {};
 
     window.Application = this;
+  }
+
+  get autocomplete() {
+    return this.#autocomplete;
   }
 
   async start() {
@@ -45,9 +51,7 @@ export default class Application {
     const pluginList = await (await fetch('/plugins/plugins.json')).json();
 
     // Getting each module from server as module
-    const modules = await Promise.all(
-      pluginList.map(pathToFile => import('/plugins/' + pathToFile))
-    );
+    const modules = await Promise.all(pluginList.map(pathToFile => import('/plugins/' + pathToFile)));
 
     // Plugin is what with the getRegistrationMeta method
     modules.forEach((module, index) => {
@@ -67,21 +71,20 @@ export default class Application {
               if (Array.isArray(meta.target)) {
                 for (let target of meta.target) {
                   if (!this.#extensions[target]) this.#extensions[target] = [];
-                  this.#extensions[target].push({...meta, plugin});
+                  this.#extensions[target].push({ ...meta, plugin });
                 }
               } else {
                 if (!this.#extensions[meta.target]) this.#extensions[meta.target] = [];
-                this.#extensions[meta.target].push({...meta, plugin});
+                this.#extensions[meta.target].push({ ...meta, plugin });
               }
             default:
               // In #plugins to add all plugins regardless of type
-              this.#plugins.push({...meta, plugin, path: pluginList[index]});
+              this.#plugins.push({ ...meta, plugin, path: pluginList[index] });
               break;
           }
         }
       }
-      if (!isPlugin)
-        console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
+      if (!isPlugin) console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
     });
   }
 
@@ -116,8 +119,7 @@ export default class Application {
           const dependence = this.#dependencies[dep.name];
           const pathToDependence = [...pathToPlgDir, 'dependencies', dep.fileName].join('/');
           if (!dependence[dep.type]) dependence[dep.type] = {};
-          if (!dependence[dep.type][dep.version])
-            dependence[dep.type][dep.version] = await import(pathToDependence);
+          if (!dependence[dep.type][dep.version]) dependence[dep.type][dep.version] = await import(pathToDependence);
         }
       }
     }
@@ -137,6 +139,9 @@ export default class Application {
     this.#count++; // increment here because when installing the plugin, extensions with their guids can be installed
     const Plugin = this.getPlugin(name);
     const instance = new Plugin(nextGUID, ...args);
+    // for autocomplete
+    this.#autocomplete[`${name}_${nextGUID}`] = instance;
+
     this.#guids[nextGUID] = instance;
     return instance;
   }
@@ -145,19 +150,28 @@ export default class Application {
     const nextGUID = `guid${this.#count}`;
     this.#count++;
     const targetExtensionList = this.#extensions[target];
-    const {plugin: Plugin} = targetExtensionList.find(extPlg => extPlg.name === pluginName);
+    const { plugin: Plugin } = targetExtensionList.find(extPlg => extPlg.name === pluginName);
     const instance = new Plugin(nextGUID, ...args);
+    // for autocomplete
+    this.#autocomplete[`${pluginName}_${nextGUID}`] = instance;
     this.#guids[nextGUID] = instance;
     return instance;
   }
 
   uninstallPluginByGUID(guid) {
+    // for autocomplete
+    const key = Object.keys(this.#autocomplete).find(instanceName => instanceName.endsWith(`[${guid}]`));
+    delete this.#autocomplete[key];
     delete this.#guids[guid];
     return true;
   }
 
   uninstallPluginByInstance(instance) {
     const guid = Object.keys(this.#guids).find(key => this.#guids[key] === instance);
+    // for autocomplete
+    const key = Object.keys(this.#autocomplete).find(instanceName => instanceName.endsWith(`[${guid}]`));
+
+    delete this.#autocomplete[key];
     delete this.#guids[guid];
     return true;
   }
@@ -192,7 +206,7 @@ export default class Application {
   }
   getPlugin(name, type = false) {
     try {
-      let {plugin} = this.#plugins.find(plg => {
+      let { plugin } = this.#plugins.find(plg => {
         return type ? plg.name === name && plg.type === type : plg.name === name;
       });
       return plugin;

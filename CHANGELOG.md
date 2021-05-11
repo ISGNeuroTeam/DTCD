@@ -18,10 +18,11 @@ server:
 client:
 
 - installExtension public method
-- getGUID public method 
+- getGUID public method
 - added list of parameters in getDependence method of Application(now is: name, type, version)
 - rollup plugin-babel
 - the way LogSystem installs
+- autocomplete object for DevPanel_Console
 
 ### Changed
 
