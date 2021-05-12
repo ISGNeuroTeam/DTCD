@@ -70,7 +70,7 @@ def design_obejct():
         return data
 
 # graph
-@app.post("/graphContent/save")
+@app.post("/v2/graphContent/save")
 def save_graph(graphs: list = Body(...)):
     count = 0
     for graph in graphs:
@@ -83,7 +83,7 @@ def save_graph(graphs: list = Body(...)):
     else:
         return {"status":"ERROR", "count": count}
 
-@app.put("/graphContent/update")
+@app.put("/v2/graphContent/update")
 def update_graph(graphs: list = Body(...)):
     count = 0
     file_list = os.listdir("./graphs")
@@ -103,7 +103,7 @@ def update_graph(graphs: list = Body(...)):
     else:
         return {"status":"ERROR", "count": count}
 
-@app.delete("/graphContent/delete")
+@app.delete("/v2/graphContent/delete")
 def delete_graph(ids: list = Body(...)):
     print(ids)
     file_list = os.listdir("./graphs")
@@ -117,7 +117,7 @@ def delete_graph(ids: list = Body(...)):
     else:
         return {"status":"ERROR", "count": count}
 
-@app.get("/graphContent/load")
+@app.get("/v2/graphContent/load")
 def load_graph(id: int = 0):
     file_list = os.listdir("./graphs")
     file_list.remove(".gitkeep")
@@ -125,7 +125,7 @@ def load_graph(id: int = 0):
         content = file.read()
     return {"id": id, "name": file_list[id], "content": content, "status": "SUCCESS"}
 
-@app.get("/graph/list")
+@app.get("/v2/graph/list")
 def graph_list():
     file_list = os.listdir("./graphs")
     file_list.remove(".gitkeep")
