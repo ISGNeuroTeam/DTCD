@@ -19,13 +19,7 @@ With mock_server:
 
 For production mode!
 
-You need to place 2 following folders in public folder:
-- plugins
-- dependencies
-
-Put core plugins of application and MenuPanel plugin in "plugins" directory
-
-Put dependencies of application in "dependencies" directory
+You need to place built core plugins of application and MenuPanel into following folder `./server/plugins`
 
 ---
 For development mode!
@@ -50,6 +44,7 @@ To do this, enter the next commands in the terminal.
 Also you can use makefile for this 
 `make dev
 `
+
 > At the end you will see starting of client-side app in terminal
 
 ## Running the tests
