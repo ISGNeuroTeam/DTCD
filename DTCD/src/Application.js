@@ -38,12 +38,11 @@ export default class Application {
 
     for (let i = 0; i < systems.length; i++) {
       const instance = this.installPlugin(systems[i]);
+      this.#systems[systems[i]] = instance;
       if (instance.init) {
         await instance.init();
       }
-      this.#systems[systems[i]] = instance;
     }
-    this.#defaultSubscriptions();
   }
 
   async #fillPlugins() {
@@ -51,7 +50,9 @@ export default class Application {
     const pluginList = await (await fetch('/plugins/plugins.json')).json();
 
     // Getting each module from server as module
-    const modules = await Promise.all(pluginList.map(pathToFile => import('/plugins/' + pathToFile)));
+    const modules = await Promise.all(
+      pluginList.map(pathToFile => import('/plugins/' + pathToFile))
+    );
 
     // Plugin is what with the getRegistrationMeta method
     modules.forEach((module, index) => {
@@ -84,7 +85,8 @@ export default class Application {
           }
         }
       }
-      if (!isPlugin) console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
+      if (!isPlugin)
+        console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
     });
   }
 
@@ -119,17 +121,11 @@ export default class Application {
           const dependence = this.#dependencies[dep.name];
           const pathToDependence = [...pathToPlgDir, 'dependencies', dep.fileName].join('/');
           if (!dependence[dep.type]) dependence[dep.type] = {};
-          if (!dependence[dep.type][dep.version]) dependence[dep.type][dep.version] = await import(pathToDependence);
+          if (!dependence[dep.type][dep.version])
+            dependence[dep.type][dep.version] = await import(pathToDependence);
         }
       }
     }
-  }
-
-  #defaultSubscriptions() {
-    const eventSystem = this.getSystem('EventSystem');
-    eventSystem.subscribeByNames('ChangeWorkspaceEditMode', 'changeMode');
-    eventSystem.subscribeByNames('DefaultAddWorkspacePanel', 'defaultAddPanel');
-    eventSystem.subscribeByNames('CompactWorkspacePanel', 'compactAllPanels');
   }
 
   // ---- PUBLIC METHODS ----
@@ -160,7 +156,9 @@ export default class Application {
 
   uninstallPluginByGUID(guid) {
     // for autocomplete
-    const key = Object.keys(this.#autocomplete).find(instanceName => instanceName.endsWith(`_${guid}`));
+    const key = Object.keys(this.#autocomplete).find(instanceName =>
+      instanceName.endsWith(`_${guid}`)
+    );
     delete this.#autocomplete[key];
     delete this.#guids[guid];
     return true;
@@ -169,7 +167,9 @@ export default class Application {
   uninstallPluginByInstance(instance) {
     const guid = Object.keys(this.#guids).find(key => this.#guids[key] === instance);
     // for autocomplete
-    const key = Object.keys(this.#autocomplete).find(instanceName => instanceName.endsWith(`_${guid}`));
+    const key = Object.keys(this.#autocomplete).find(instanceName =>
+      instanceName.endsWith(`_${guid}`)
+    );
 
     delete this.#autocomplete[key];
     delete this.#guids[guid];
