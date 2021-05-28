@@ -147,8 +147,23 @@ if not os.path.isdir("./../public"):
 if not os.path.isdir("./graphs"):
     os.mkdir("./graphs")
 
-app.mount("/plugins", StaticFiles(directory="./plugins"))
+from aiofiles.os import stat as aio_stat
+class StaticFilesSym(StaticFiles):
+  "subclass StaticFiles middleware to allow symlinks"
+  async def lookup_path(self, path):
+    for directory in self.all_directories:
+      full_path = os.path.realpath(os.path.join(directory, path))
+      try:
+        stat_result = await aio_stat(full_path)
+        return (full_path, stat_result)
+      except FileNotFoundError:
+        pass
+    return ("", None)
+
+app.mount("/plugins", StaticFilesSym(directory="./plugins"))
+app.mount("/tmp", StaticFiles(directory="./tmp"))
 app.mount("/", StaticFiles(directory="./../public"))
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", port=5000)

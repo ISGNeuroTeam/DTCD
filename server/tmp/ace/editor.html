@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ACE in Action</title>
+  <style type="text/css" media="screen">
+    #editor {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="editor">| __read__ path=omds_well_adku
+  | rename adkuLiquidDebit as debit | table _time, padNum, wellNum, pumpModel, pumpDepth, debit
+  | append [ | __read__ path=omds_well_wellop | rename neftWellopPzaboyFromHdin as pZaboy | rename neftWellopVolumeWater as volumeWater | table _time, padNum, wellNum, volumeWater, pZaboy ]
+  | append [ | __read__ path=plast | eval plastP = tonumber(InitialPlastP) | eval plastT = tonumber(PlastT) | table _time, padNum, wellNum, plastP, plastT ]
+  | sort _time
+  | filldown plastP, plastT,  volumeWater, pZaboy  by wellNum
+  | eval x=if(a>5, true, false), y=asd
+  | where _time>=1575147600 AND _time<=1577826000
+  | stats max(x) by y</div>
+
+<script src="/tmp/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/chrome");
+  editor.session.setMode("ace/mode/otl");
+</script>
+</body>
+</html>
