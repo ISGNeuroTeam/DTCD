@@ -464,27 +464,28 @@ def workspace_configuration(id: int = 0):
     if not id:
         mapped_confs = list(map(lambda conf: {'id':conf['id'], 'title':conf['title']} , configurations))
         return mapped_confs
-    return next(conf for conf in configurations if conf["id"] == id)
+    conf =  next(conf for conf in configurations if conf["id"] == id)
+    return {'id': conf['id'], 'title':conf['title'], 'content':json.dumps(conf)}
 
 @app.post("/v2/workspace/object")
 def create_workspace(workspace: dict = Body(...)):
     return workspace
 
 @app.put("/v2/workspace/object")
-def update_workspace(workspace: dict = Body(...)):
+def update_workspace(array: list = Body(...)):
     idx = -1
     for conf in configurations:
-        if conf['id'] == workspace['id']:
+        if conf['id'] == array[0]['id']:
             idx = configurations.index(conf)
     if idx != -1:
-        configurations[idx] = workspace
+        configurations[idx]['title'] = array[0]['title']
     return configurations
 
 @app.delete("/v2/workspace/object")
-def delete_workspace(object: dict = Body(...)):
+def delete_workspace(object: list = Body(...)):
     idx = -1
     for conf in configurations:
-        if conf['id'] == object['id']:
+        if conf['id'] == object[0]:
             idx = configurations.index(conf)
     if idx != -1:
         configurations.pop(idx)
