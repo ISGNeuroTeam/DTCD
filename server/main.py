@@ -24,335 +24,20 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-configurations = [{
-    'id': 1,
-    'title': 'LiveDash Configuration 1',
-    'systems': [
-        {
-        'name': 'WorkspaceSystem',
-        'version': '0.2.0',
-        'guid': 'guid1',
-        'metadata': {},
-    },
-    ],
-    'panels': [
-    {
-        'name': 'MenuPanel',
-        'undeletable': True,
-        'version': '1.0.0',
-        'guid': 'guid2',
-        'position': {
-        'x': 0,
-        'y': 0,
-        'w': 12,
-        'h': 1,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'LiveDashPanel',
-        'version': '1.0.0',
-        'guid': 'guid3',
-        'position': {
-        'x': 0,
-        'y': 1,
-        'w': 9,
-        'h': 5, 
-        },
-        'metadata': {},
-    },
-        {
-        'name': 'PrimitiveLibraryPanel',
-        'version': '1.0.0',
-        'guid': 'guid4',
-        'position': {
-        'x': 9,
-        'y': 1,
-        'w': 3,
-        'h': 5,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'DevPanel',
-        'version': '1.0.0',
-        'guid': 'guid5',
-        'position': {
-        'x': 0,
-        'y': 6,
-        'w': 12,
-        'h': 4,
-        },
-        'metadata': {},
-    },
-    ],
-    'subscriptions': [
-    {
-        'event': {
-            'name': 'ChangeWorkspaceEditMode',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'changeMode',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'DefaultAddWorkspacePanel',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'createEmptyCell',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'CompactWorkspacePanel',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'compactAllPanels',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'BackToWorkspaceSelection',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'setDefaultConfiguration',
-            'guid': 'guid1'
-        }
-    },
-    ],
-},
-{
-    'id': 2,
-    'title': 'LiveDash Configuration 2',
-    'systems': [
-        {
-        'name': 'WorkspaceSystem',
-        'version': '0.2.0',
-        'guid': 'guid1',
-        'metadata': {},
-    },
-    ],
-    'panels': [
-    {
-        'name': 'MenuPanel',
-        'undeletable': True,
-        'version': '1.0.0',
-        'guid': 'guid2',
-        'position': {
-        'x': 0,
-        'y': 0,
-        'w': 12,
-        'h': 1,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'PrimitiveLibraryPanel',
-        'version': '1.0.0',
-        'guid': 'guid3',
-        'position': {
-        'x': 0,
-        'y': 1,
-        'w': 2,
-        'h': 4,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'LiveDashPanel',
-        'version': '1.0.0',
-        'guid': 'guid4',
-        'position': {
-        'x': 2,
-        'y': 1,
-        'w': 8,
-        'h': 4,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'PrimitivePropertiesPanel',
-        'version': '1.0.0',
-        'guid': 'guid5',
-        'position': {
-        'x': 10,
-        'y': 1,
-        'w': 2,
-        'h': 4,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'DevPanel',
-        'version': '1.0.0',
-        'guid': 'guid5',
-        'position': {
-        'x': 0,
-        'y': 5,
-        'w': 10,
-        'h': 4,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'PrimitiveStylePanel',
-        'version': '1.0.0',
-        'guid': 'guid5',
-        'position': {
-        'x': 10,
-        'y': 5,
-        'w': 2,
-        'h': 4,
-        },
-        'metadata': {},
-    },
-    ],
-    'subscriptions': [
-    {
-        'event': {
-            'name': 'ChangeWorkspaceEditMode',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'changeMode',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'DefaultAddWorkspacePanel',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'createEmptyCell',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'CompactWorkspacePanel',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'compactAllPanels',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'BackToWorkspaceSelection',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'setDefaultConfiguration',
-            'guid': 'guid1'
-        }
-    },
-    ],
-},
-{
-    'id': 3,
-    'title': 'Audit Workspace Configuration',
-    'systems': [
-        {
-        'name': 'WorkspaceSystem',
-        'version': '0.2.0',
-        'guid': 'guid1',
-        'metadata': {},
-    },
-    ],
-    'panels': [
-    {
-        'name': 'MenuPanel',
-        'undeletable': True,
-        'version': '1.0.0',
-        'guid': 'guid2',
-        'position': {
-        'x': 0,
-        'y': 0,
-        'w': 12,
-        'h': 1,
-        },
-        'metadata': {},
-    },
-    {
-        'name': 'AuditPanel',
-        'version': '1.0.0',
-        'guid': 'guid3',
-        'position': {
-        'x': 0,
-        'y': 1,
-        'w': 12,
-        'h': 6,
-        },
-        'metadata': {},
-    },
-    ],
-    'subscriptions': [
-    {
-        'event': {
-            'name': 'ChangeWorkspaceEditMode',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'changeMode',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'DefaultAddWorkspacePanel',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'createEmptyCell',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'CompactWorkspacePanel',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'compactAllPanels',
-            'guid': 'guid1'
-        }
-    },
-    {
-        'event': {
-            'name': 'BackToWorkspaceSelection',
-            'guid': 'guid2'
-            
-        },
-        'action':{
-            'name': 'setDefaultConfiguration',
-            'guid': 'guid1'
-        }
-    },
-    ],
-}
-]
-    
+# Workspaces
+workspaces = []
+list_dir_workspaces = os.listdir("./workspaces")
+list_dir_workspaces.remove(".gitkeep")
+
+if ".DS_Store" in list_dir_workspaces:
+    list_dir_workspaces.remove(".DS_Store")
+
+for file_name in list_dir_workspaces:
+    with open(f'./workspaces/{file_name}', "r") as file:
+        configuration = json.loads(file.read())
+        workspaces.append(configuration)
+# TODO: Add CRUD workspace config files 
+
 # Application
 @app.get("/", response_class=HTMLResponse)
 async def read_html():
@@ -462,9 +147,9 @@ def graph_list():
 @app.get("/v2/workspace/object")
 def workspace_configuration(id: int = 0):
     if not id:
-        mapped_confs = list(map(lambda conf: {'id':conf['id'], 'title':conf['title']} , configurations))
+        mapped_confs = list(map(lambda conf: {'id':conf['id'], 'title':conf['title']} , workspaces))
         return mapped_confs
-    conf =  next(conf for conf in configurations if conf["id"] == id)
+    conf =  next(conf for conf in workspaces if conf["id"] == id)
     return {'id': conf['id'], 'title':conf['title'], 'content':json.dumps(conf)}
 
 @app.post("/v2/workspace/object")
@@ -474,21 +159,21 @@ def create_workspace(workspace: dict = Body(...)):
 @app.put("/v2/workspace/object")
 def update_workspace(array: list = Body(...)):
     idx = -1
-    for conf in configurations:
+    for conf in workspaces:
         if conf['id'] == array[0]['id']:
-            idx = configurations.index(conf)
+            idx = workspaces.index(conf)
     if idx != -1:
-        configurations[idx]['title'] = array[0]['title']
-    return configurations
+        workspaces[idx]['title'] = array[0]['title']
+    return workspaces
 
 @app.delete("/v2/workspace/object")
 def delete_workspace(object: list = Body(...)):
     idx = -1
-    for conf in configurations:
+    for conf in workspaces:
         if conf['id'] == object[0]:
-            idx = configurations.index(conf)
+            idx = workspaces.index(conf)
     if idx != -1:
-        configurations.pop(idx)
+        workspaces.pop(idx)
         return 'success'
     return 'error'
 

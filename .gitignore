@@ -16,6 +16,9 @@ server/graphs/*
 server/plugins/*
 !server/plugins/.gitkeep
 
+# server/workspaces/*
+!server/workspaces/.gitkeep
+
 # vscode
 .vscode
 
