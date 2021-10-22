@@ -25,18 +25,18 @@ app.add_middleware(
 )
 
 # Workspaces
-workspaces = []
-list_dir_workspaces = os.listdir("./workspaces")
-list_dir_workspaces.remove(".gitkeep")
+def get_workspace_list():
+    list_dir_workspaces = os.listdir("./workspaces")
+    list_dir_workspaces.remove(".gitkeep")
+    if ".DS_Store" in list_dir_workspaces:
+        list_dir_workspaces.remove(".DS_Store")
 
-if ".DS_Store" in list_dir_workspaces:
-    list_dir_workspaces.remove(".DS_Store")
-
-for file_name in list_dir_workspaces:
-    with open(f'./workspaces/{file_name}', "r") as file:
-        configuration = json.loads(file.read())
-        workspaces.append(configuration)
-# TODO: Add CRUD workspace config files 
+    workspaces=[]
+    for file_name in list_dir_workspaces:
+        with open(f'./workspaces/{file_name}', "r") as file:
+            configuration = json.loads(file.read())
+            workspaces.append(configuration)
+    return workspaces
 
 # Application
 @app.get("/", response_class=HTMLResponse)
@@ -146,18 +146,26 @@ def graph_list():
 
 @app.get("/v2/workspace/object")
 def workspace_configuration(id: int = 0):
+    workspaces = get_workspace_list()
     if not id:
-        mapped_confs = list(map(lambda conf: {'id':conf['id'], 'title':conf['title']} , workspaces))
+        mapped_confs = list(map(lambda conf: {'id':conf['id'], 'title':conf['title']}, workspaces))
         return mapped_confs
-    conf =  next(conf for conf in workspaces if conf["id"] == id)
+    conf = next(conf for conf in workspaces if conf["id"] == id)
     return {'id': conf['id'], 'title':conf['title'], 'content':json.dumps(conf)}
 
 @app.post("/v2/workspace/object")
-def create_workspace(workspace: dict = Body(...)):
-    return workspace
+def create_workspace(workspaces: list = Body(...)):
+    file_list = os.listdir("./workspaces")
+    for workspace in workspaces:
+        id = len(file_list)
+        workspace["id"] = id
+        with open(os.path.join("./workspaces", f"{id}.json"), "w") as file:
+            file.write(json.dumps(workspace))
+    return workspaces
 
 @app.put("/v2/workspace/object")
 def update_workspace(array: list = Body(...)):
+    workspaces = get_workspace_list()
     idx = -1
     for conf in workspaces:
         if conf['id'] == array[0]['id']:
@@ -167,15 +175,15 @@ def update_workspace(array: list = Body(...)):
     return workspaces
 
 @app.delete("/v2/workspace/object")
-def delete_workspace(object: list = Body(...)):
-    idx = -1
-    for conf in workspaces:
-        if conf['id'] == object[0]:
-            idx = workspaces.index(conf)
-    if idx != -1:
-        workspaces.pop(idx)
-        return 'success'
-    return 'error'
+def delete_workspace(idxes: list = Body(...)):
+    file_list = os.listdir("./workspaces")
+    for idx in idxes:
+        file_name = f"{idx}.json"
+        if file_list.index(file_name) != -1:
+            os.remove(os.path.join("./workspaces",file_name))
+        else:
+            return 'error'
+    return 'success'
 
 # GIS
 @app.get("/get-gis-data")
