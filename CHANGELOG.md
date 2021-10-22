@@ -11,12 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 server:
 
-- .gitkeep to graphs directory
+- .gitkeep to "workspaces" directory
+- inited workspaces endpoints
+- .gitkeep to "graphs" directory
 - CRUD endpoints for LiveDash
 - endpoints for LogSystem
 
 client:
 
+- removed dublicate of instance assignment to window.Application
 - installExtension public method
 - getGUID public method
 - added list of parameters in getDependence method of Application(now is: name, type, version)
