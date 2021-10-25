@@ -151,28 +151,38 @@ def workspace_configuration(id: int = 0):
         mapped_confs = list(map(lambda conf: {'id':conf['id'], 'title':conf['title']}, workspaces))
         return mapped_confs
     conf = next(conf for conf in workspaces if conf["id"] == id)
-    return {'id': conf['id'], 'title':conf['title'], 'content':json.dumps(conf)}
+    return conf
 
 @app.post("/v2/workspace/object")
 def create_workspace(workspaces: list = Body(...)):
-    file_list = os.listdir("./workspaces")
-    for workspace in workspaces:
-        id = len(file_list)
-        workspace["id"] = id
+    for configuration in workspaces:
+        workspaceList = get_workspace_list()
+        id = 0
+        if len(workspaceList) != 0:
+            id = max(list(map(lambda conf: conf['id'], workspaceList))) + 1
+        else:
+            id = 1
+        configuration["id"] = id
         with open(os.path.join("./workspaces", f"{id}.json"), "w") as file:
-            file.write(json.dumps(workspace))
+            file.write(json.dumps(configuration))
     return workspaces
 
 @app.put("/v2/workspace/object")
-def update_workspace(array: list = Body(...)):
-    workspaces = get_workspace_list()
-    idx = -1
+def update_workspace(workspaces: list = Body(...)):
+    file_list = os.listdir("./workspaces")
+    edited = []
     for conf in workspaces:
-        if conf['id'] == array[0]['id']:
-            idx = workspaces.index(conf)
-    if idx != -1:
-        workspaces[idx]['title'] = array[0]['title']
-    return workspaces
+        file_name = f"{conf['id']}.json"
+        if file_list.index(file_name) != -1:
+            configuration = ''
+            with open(f'./workspaces/{file_name}', "r") as file:
+                configuration = json.loads(file.read())
+            os.remove(os.path.join("./workspaces",file_name))
+            configuration['title'] = conf['title']
+            with open(os.path.join("./workspaces", f"{conf['id']}.json"), "w") as file:
+                file.write(json.dumps(configuration))
+            edited.append(conf['id'])
+    return edited
 
 @app.delete("/v2/workspace/object")
 def delete_workspace(idxes: list = Body(...)):
