@@ -174,13 +174,18 @@ def update_workspace(workspaces: list = Body(...)):
     for conf in workspaces:
         file_name = f"{conf['id']}.json"
         if file_list.index(file_name) != -1:
-            configuration = ''
-            with open(f'./workspaces/{file_name}', "r") as file:
-                configuration = json.loads(file.read())
-            os.remove(os.path.join("./workspaces",file_name))
-            configuration['title'] = conf['title']
-            with open(os.path.join("./workspaces", f"{conf['id']}.json"), "w") as file:
-                file.write(json.dumps(configuration))
+            if not conf['content']:
+                configuration = ''
+                with open(f'./workspaces/{file_name}', "r") as file:
+                    configuration = json.loads(file.read())
+                os.remove(os.path.join("./workspaces",file_name))
+                configuration['title'] = conf['title']
+                with open(os.path.join("./workspaces", f"{conf['id']}.json"), "w") as file:
+                    file.write(json.dumps(configuration))
+            else:
+                os.remove(os.path.join("./workspaces",file_name))
+                with open(os.path.join("./workspaces", f"{conf['id']}.json"), "w") as file:
+                    file.write(json.dumps(conf))
             edited.append(conf['id'])
     return edited
 

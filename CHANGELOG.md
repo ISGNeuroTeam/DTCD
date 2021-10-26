@@ -37,6 +37,13 @@ client:
 
 -the way LogSystem installs
 
+
+### Fixed
+
+server:
+
+- PUT endpoint saves changes in workspace configuration correctly
+
 ## [0.2.1] - 2021-02-16
 
 ### Fixed
