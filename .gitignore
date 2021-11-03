@@ -22,5 +22,8 @@ server/workspaces/
 # vscode
 .vscode
 
+# pycharm
+.idea
+
 # logs
 *.log
