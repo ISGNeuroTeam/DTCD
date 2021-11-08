@@ -43,6 +43,7 @@ client:
 server:
 
 - PUT endpoint saves changes in workspace configuration correctly
+- added copies flag to venv
 
 ## [0.2.1] - 2021-02-16
 

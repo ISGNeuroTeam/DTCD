@@ -65,7 +65,7 @@ dev: $(PROJECT_NAME)/node_modules venv $(COMPONENTS)
 
 venv:
 	echo Start installing virtualenv
-	python3 -m venv ./server/venv
+	python3 -m venv --copies ./server/venv
 	cd ./server; ./venv/bin/pip3 install -r requirements.txt
 
 $(PROJECT_NAME)/node_modules:
