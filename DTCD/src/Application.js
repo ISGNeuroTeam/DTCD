@@ -227,4 +227,8 @@ export default class Application {
   getGUID(instance) {
     return Object.keys(this.#guids).find(guid => this.#guids[guid] === instance);
   }
+
+  getGUIDList() {
+    return Object.keys(this.#guids);
+  }
 }
