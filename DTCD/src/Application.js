@@ -47,7 +47,7 @@ export default class Application {
 
   async #fillPlugins() {
     // Getting list of all plugins
-    const pluginList = await (await fetch('/plugins/plugins.json')).json();
+    const pluginList = await (await fetch('/mock_server/v1/plugins/plugins.json')).json();
 
     // Getting each module from server as module
     const modules = await Promise.all(
