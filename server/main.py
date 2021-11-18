@@ -44,7 +44,7 @@ async def read_html():
     with open("./../public/index.html",'r') as file:
         return file.read()
 
-@app.get("/plugins/plugins.json")
+@app.get("/mock_server/v1/plugins/plugins.json")
 def read_plugins_list():
     list_dir = os.listdir("./plugins")
     list_dir.remove(".gitkeep")
@@ -199,13 +199,6 @@ def delete_workspace(idxes: list = Body(...)):
         else:
             return 'error'
     return 'success'
-
-# GIS
-@app.get("/get-gis-data")
-def give_bounds():
-    with open("./GIS_data.json","r") as file:
-        data = json.load(file)
-        return data
 
 if not os.path.isdir("./plugins"):
     os.mkdir("./plugins")
