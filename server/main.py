@@ -144,7 +144,7 @@ def graph_list():
     file_list.remove(".gitkeep")
     return [ {"name": file_name, "id": index} for index, file_name in enumerate(file_list)]
 
-@app.get("/v2/workspace/object")
+@app.get("/mock_server/v1/workspace/object")
 def workspace_configuration(id: int = 0):
     workspaces = get_workspace_list()
     if not id:
@@ -153,7 +153,7 @@ def workspace_configuration(id: int = 0):
     conf = next(conf for conf in workspaces if conf["id"] == id)
     return conf
 
-@app.post("/v2/workspace/object")
+@app.post("/mock_server/v1/workspace/object")
 def create_workspace(workspaces: list = Body(...)):
     for configuration in workspaces:
         workspaceList = get_workspace_list()
@@ -167,7 +167,7 @@ def create_workspace(workspaces: list = Body(...)):
             file.write(json.dumps(configuration))
     return workspaces
 
-@app.put("/v2/workspace/object")
+@app.put("/mock_server/v1/workspace/object")
 def update_workspace(workspaces: list = Body(...)):
     file_list = os.listdir("./workspaces")
     edited = []
@@ -189,7 +189,7 @@ def update_workspace(workspaces: list = Body(...)):
             edited.append(conf['id'])
     return edited
 
-@app.delete("/v2/workspace/object")
+@app.delete("/mock_server/v1/workspace/object")
 def delete_workspace(idxes: list = Body(...)):
     file_list = os.listdir("./workspaces")
     for idx in idxes:
