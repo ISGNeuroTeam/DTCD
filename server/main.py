@@ -76,7 +76,7 @@ def logs_save(logs: list = Body(...)):
     return 'saved!'
 
 #StyleSystem
-@app.get("/get-design-objects")
+@app.get("/mock_server/v1/get-design-objects")
 def design_obejct():
     with open("./Design_objects.json","r") as file:
         data = json.load(file)
