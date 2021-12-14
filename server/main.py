@@ -168,26 +168,23 @@ def create_workspace(workspaces: list = Body(...)):
     return workspaces
 
 @app.put("/mock_server/v1/workspace/object")
-def update_workspace(workspaces: list = Body(...)):
+def update_workspace(obj: dict = Body(...)):
     file_list = os.listdir("./workspaces")
-    edited = []
-    for conf in workspaces:
-        file_name = f"{conf['id']}.json"
-        if file_list.index(file_name) != -1:
-            if not conf['content']:
-                configuration = ''
-                with open(f'./workspaces/{file_name}', "r") as file:
-                    configuration = json.loads(file.read())
-                os.remove(os.path.join("./workspaces",file_name))
-                configuration['title'] = conf['title']
-                with open(os.path.join("./workspaces", f"{conf['id']}.json"), "w") as file:
-                    file.write(json.dumps(configuration))
-            else:
-                os.remove(os.path.join("./workspaces",file_name))
-                with open(os.path.join("./workspaces", f"{conf['id']}.json"), "w") as file:
-                    file.write(json.dumps(conf))
-            edited.append(conf['id'])
-    return edited
+    file_name = f"{obj['id']}.json"
+    if file_list.index(file_name) != -1:
+        if not 'content' in obj:
+            configuration = ''
+            with open(f'./workspaces/{file_name}', "r") as file:
+                configuration = json.loads(file.read())
+            os.remove(os.path.join("./workspaces",file_name))
+            configuration['title'] = obj['title']
+            with open(os.path.join("./workspaces", f"{obj['id']}.json"), "w") as file:
+                file.write(json.dumps(configuration))
+        else:
+            os.remove(os.path.join("./workspaces",file_name))
+            with open(os.path.join("./workspaces", f"{obj['id']}.json"), "w") as file:
+                file.write(json.dumps(obj))
+    return obj
 
 @app.delete("/mock_server/v1/workspace/object")
 def delete_workspace(idxes: list = Body(...)):
