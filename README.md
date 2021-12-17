@@ -1,59 +1,45 @@
 # DTCD
 
-It's web-interface for editing of System Object Model (SOM), OMDS.
+It's an application for creating configurable web interfaces over [OT.Platform](https://ot-platform.ru/)
 
 ## Getting Started
 
 ### Prerequisites
-```
-- Node.js v.14.x.x
-```
-With mock_server:
-```
-- Python v3.8
-- Virtualenv, tool to create isolated Python environments
 
-```
+- [Node.js](https://nodejs.org/en/) LTS version 14.x.x
+- [nginx](https://nginx.org) v1.21.4
+- [complex_rest](https://github.com/ISGNeuroTeam/complex_rest) v0.1.0
+- [dtcd_mock_server](https://github.com/ISGNeuroTeam/dtcd_mockserver_plugin) v0.1.0
+- [jobmanager_transit](https://github.com/ISGNeuroTeam/jobsmanager_transit) v0.1.0
+- [DTCD-LogSystem](https://github.com/ISGNeuroTeam/DTCD-LogSystem) v0.4.0
+- [DTCD-EventSystem](https://github.com/ISGNeuroTeam/DTCD-EventSystem) v0.3.0
+- [DTCD-InteractionSystem](https://github.com/ISGNeuroTeam/DTCD-InteractionSystem) v0.3.0
+- [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.4.0
+- [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.3.0
+- [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.1.0
+- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.3.0
+- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.1.0
+- [DTCD-MenuPanel-FGK](https://github.com/ISGNeuroTeam/DTCD-MenuPanel-FGK) v0.1.0
 
 ### Installing
 
-For production mode!
+In order to install DTCD firstly you need to deploy _complex_rest_ with it's plugins: _dtcd_mock_server_ and _jobmanager_transit_. How to deploy _complex_rest_ you can see in it's [repository](https://github.com/ISGNeuroTeam/complex_rest).
 
-You need to place 2 following folders in public folder:
-- plugins
-- dependencies
+1. Build DTCD application:
 
-Put core plugins of application and MenuPanel plugin in "plugins" directory
+   ```
+   make build
+   ```
 
-Put dependencies of application in "dependencies" directory
-
----
-For development mode!
-
-To start working with the application only on local machine in development mode, 
-you need to install all dependencies from ./client/package.json and from ./server/requirements.txt 
-and start client-side application with mock-server application. 
-To do this, enter the next commands in the terminal.
-
-* Installing dependencies for client-side application and start them.
-> 1. `cd ./DTCD`
-> 2. `npm i`
-> 3. `npm run dev`
-
-* Installing dependencies for mock-server application and start them.
-> 1. Open new terminal and go to root of repo.
-> 2. `cd ./server`
-> 3. `source ./venv/bin/activate`
-> 4. `pip install -r requirements.txt`
-> 5. `python3 main.py`
-
-Also you can use makefile for this 
-`make dev
-`
-> At the end you will see starting of client-side app in terminal
+2. Move public directory of build to complex_rest plugin dtcd_mockserver_plugin.
+3. Build all DTCD plugins listed in prerequisites above and move them to _dtcd_mockserver_plugin_ plugins directory of complex_rest. This is the required minimum of plugins you need to work with DTCD.
+4. Serve application with nginx web server. You can see the [template](/docs/nginx_config.conf.template) of config.
 
 ## Running the tests
-`npm run test` from client directory or `make test`
+
+```
+make test
+```
 
 ## Create build package
 
@@ -69,44 +55,29 @@ make clear
 
 ## Deployment
 
-Create build package, unpack and move it to public directory by the following command:
-```
-tar -zxf DTCD-*.tar.gz
-```
-After, you need serve public directory and remove archive by following command
-```
-rm DTCD-*.tar.gz
-```
+Use `make pack` to get a deployable tarball. Move it to public directory of complex_rest dtcd_mockserver_plugin.
 
 ## Built With
 
-* [Node.js](https://maven.apache.org/) - for client-side app build
-* [rollup.js](https://maven.apache.org/) - for client-side app bundle
-* [Python3](http://www.dropwizard.io/1.0.2/docs/) - for starting Mock_server
-* [GridStack.js](https://rometools.github.io/rome/) - for workspace on client-side app
-* [PubSub.js](https://rometools.github.io/rome/) - EventSystem of DataCAD
-* [FastAPI](https://rometools.github.io/rome/) - Mock_server http server library
+- [rollup.js](https://maven.apache.org/) - for client-side app bundle
 
 ## Contributing
 
-Contact with development [Team](https://github.com/ISGNeuroTeam) for details on our code of conduct, and the process for submitting pull requests.
-
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/ISGNeuroTeam/DataCAD/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/ISGNeuroTeam/DataCAD/tags).
 
 ## Authors
 
-**[Team](https://github.com/ISGNeuroTeam)**
+- Andrey Starchenkov (astarchenkov@isgneuro.com)
+- Konstantin Rozov (konstantin@isgneuro.com)
+- Roman Kuramshin (rkuramshin@isgneuro.com)
+- Sergei Belikov (sbelikov@isgneuro.com)
 
 See also the list of [contributors](https://github.com/ISGNeuroTeam/DataCAD/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the [LICENSE.md](LICENSE.md) 
+This project is licensed under the [LICENSE.md](LICENSE.md)
 
 ## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc

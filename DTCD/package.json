@@ -1,6 +1,6 @@
 {
-  "name": "DTCD",
-  "version": "0.2.1",
+  "name": "dtcd",
+  "version": "0.3.0",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -11,13 +11,12 @@
   "keywords": [],
   "author": "",
   "license": "",
-  "activationEvents": [
-    "workspaceContains:node_modules/.bin/jest",
-    "onCommand:io.orta.jest.start"
-  ],
   "devDependencies": {
     "@babel/core": "^7.12.13",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-private-methods": "^7.13.0",
     "@babel/preset-env": "^7.12.11",
+    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-html": "^0.2.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
@@ -27,7 +26,7 @@
     "babel-plugin-root-import": "^6.6.0",
     "jest": "^26.6.3",
     "node-fetch": "^2.6.1",
-    "rollup": "^2.32.1",
+    "rollup": "^2.43.0",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-postcss": "^3.1.8"
