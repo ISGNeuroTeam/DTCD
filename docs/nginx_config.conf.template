@@ -1,0 +1,43 @@
+server {
+    listen _PORT_;
+    server_name     _DOMAIN_NAME_;
+    charset     utf-8;
+
+    client_max_body_size 75M;
+    
+    root _PATH_TO_DTCD_PUBLIC_DIRECTORY_;
+
+    location /plugins {
+        alias _PATH_TO_DTCD_PLUGINS_DIRECTORY_;
+	    autoindex on;
+    }
+
+    location / {
+        index index.html;
+    }
+
+    location ~ ^/cache {
+        proxy_pass_header Server;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_pass _URL_TO_COMPLEX_REST_;   
+    }
+
+    location ^~ /mock_server/v1/ {
+        proxy_pass _URL_TO_COMPLEX_REST_; 
+    }
+
+    location /api/makejob {
+        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/makejob;
+    }
+
+    location /api/checkjob {
+        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/checkjob;
+    }
+
+    location /api/getresult {
+        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/getresult;
+    }
+}
