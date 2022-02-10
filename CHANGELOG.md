@@ -26,6 +26,7 @@ client:
 - rollup plugin-babel
 - the way LogSystem installs
 - autocomplete object for DevPanel_Console
+- support of plugin versions
 
 ### Changed
 

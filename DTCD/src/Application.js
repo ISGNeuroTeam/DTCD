@@ -40,15 +40,10 @@ export default class Application {
         .filter(plg => plg.name === 'WorkspaceSystem')
         .reduce((a, b) => (a.version > b.version ? a : b))
     );
-    console.log(systems);
 
     for (let i = 0; i < systems.length; i++) {
       const { name, version } = systems[i];
-      const instance = this.installSystem({ name, version });
-      console.log(this.#systems);
-      if (instance?.init) {
-        await instance.init();
-      }
+      await this.#installSystem({ name, version });
     }
   }
 
@@ -135,22 +130,7 @@ export default class Application {
     }
   }
 
-  // ---- PUBLIC METHODS ----
-
-  // installPlugin(name, ...args) {
-  //   const nextGUID = `guid${this.#count}`;
-  //   this.#count++; // increment here because when installing the plugin, extensions with their guids can be installed
-  //   const Plugin = this.getPlugin(name);
-  //   const instance = new Plugin(nextGUID, ...args);
-  //   // for autocomplete
-  //   this.#autocomplete[`${name}_${nextGUID}`] = instance;
-
-  //   this.#guids[nextGUID] = { ...Plugin.getRegistrationMeta(), instance };
-  //   // console.log(this.#guids);
-  //   return instance;
-  // }
-
-  installSystem({ name, version, guid }) {
+  async #installSystem({ name, version, guid }) {
     if (!name || !version) {
       return console.error(`Name and version should be specified in order to install system!`);
     }
@@ -173,6 +153,8 @@ export default class Application {
 
       this.#systems[`${name}${version}`] = instance;
 
+      if (instance.init) await instance.init();
+
       return instance;
     } catch (error) {
       console.log(error);
@@ -194,7 +176,7 @@ export default class Application {
       guid = `guid${this.#count}`;
       this.#count++;
     }
-    const Plugin = this.getPlugin(name);
+    const Plugin = this.getPlugin(name, version);
     const instance = new Plugin(guid, selector);
     // for autocomplete
     this.#autocomplete[`${name}_${guid}`] = instance;
@@ -262,13 +244,15 @@ export default class Application {
 
   getSystem(name, version) {
     if (!name || !version) {
-      return console.error('You should specify name and version of system');
+      throw new Error('You should specify name and version of system');
     }
 
     if (typeof name !== 'string') return console.error('Name should be string');
     if (typeof version !== 'string') return console.error('Version should be string');
 
-    return this.#systems[`${name.trim()}${version.trim()}`];
+    const system = this.#systems[`${name.trim()}${version.trim()}`];
+    if (system) return system;
+    else throw new Error(`Plugin ${name} ${version} not found!`);
   }
 
   getPanels() {
@@ -277,7 +261,7 @@ export default class Application {
 
   getPlugin(name, version) {
     if (!name || !version) {
-      return console.error(`Name and version should be specified in order to get plugin!`);
+      throw new Error(`Name and version should be specified in order to get plugin!`);
     }
 
     if (typeof name !== 'string') return console.error('Name should be string');
@@ -287,7 +271,7 @@ export default class Application {
     if (plugin) {
       return plugin;
     } else {
-      return new Error(`Plugin ${name} ${version} not found!`);
+      throw new Error(`Plugin ${name} ${version} not found!`);
     }
   }
 
