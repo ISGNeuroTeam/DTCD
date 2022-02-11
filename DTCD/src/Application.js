@@ -189,11 +189,11 @@ export default class Application {
     const nextGUID = `guid${this.#count}`;
     this.#count++;
     const targetExtensionList = this.#extensions[target];
-    const { plugin: Plugin } = targetExtensionList.find(extPlg => extPlg.name === pluginName);
-    const instance = new Plugin(nextGUID, ...args);
+    const extension = targetExtensionList.find(extPlg => extPlg.name === pluginName);
+    const instance = new extension.plugin(nextGUID, ...args);
     // for autocomplete
     this.#autocomplete[`${pluginName}_${nextGUID}`] = instance;
-    this.#guids[nextGUID] = instance;
+    this.#guids[nextGUID] = { ...extension.getRegistrationMeta(), instance };
     return instance;
   }
 
@@ -208,7 +208,7 @@ export default class Application {
   }
 
   uninstallPluginByInstance(instance) {
-    const guid = Object.keys(this.#guids).find(key => this.#guids[key] === instance);
+    const guid = Object.keys(this.#guids).find(key => this.#guids[key].instance === instance);
     // for autocomplete
     const key = Object.keys(this.#autocomplete).find(instanceName =>
       instanceName.endsWith(`_${guid}`)
