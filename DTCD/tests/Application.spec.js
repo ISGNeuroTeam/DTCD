@@ -20,7 +20,7 @@ describe('Application tests...', () => {
     it('Properties of Application', () => {
       const app = new Application();
       expect(app).toMatchObject({
-        installPlugin: expect.any(Function),
+        installPanel: expect.any(Function),
         getDependence: expect.any(Function),
         getExtensions: expect.any(Function),
         getSystem: expect.any(Function),
