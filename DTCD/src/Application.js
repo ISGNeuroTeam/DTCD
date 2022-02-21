@@ -32,16 +32,18 @@ export default class Application {
     await this.#fillDependencies();
 
     let systems = this.#plugins
-      .filter(plg => plg.type === 'core')
-      .sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority)
-      .map(plg => plg.name);
+      .filter(plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem')
+      .sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
+
+    systems.push(
+      this.#plugins
+        .filter(plg => plg.name === 'WorkspaceSystem')
+        .reduce((a, b) => (a.version > b.version ? a : b))
+    );
 
     for (let i = 0; i < systems.length; i++) {
-      const instance = this.installPlugin(systems[i]);
-      this.#systems[systems[i]] = instance;
-      if (instance.init) {
-        await instance.init();
-      }
+      const { name, version } = systems[i];
+      await this.#installSystem({ name, version });
     }
   }
 
@@ -128,17 +130,58 @@ export default class Application {
     }
   }
 
-  // ---- PUBLIC METHODS ----
+  async #installSystem({ name, version, guid }) {
+    if (!name || !version) {
+      return console.error(`Name and version should be specified in order to install system!`);
+    }
 
-  installPlugin(name, ...args) {
-    const nextGUID = `guid${this.#count}`;
-    this.#count++; // increment here because when installing the plugin, extensions with their guids can be installed
-    const Plugin = this.getPlugin(name);
-    const instance = new Plugin(nextGUID, ...args);
+    if (typeof name !== 'string') return console.error('Name should be string');
+    if (typeof version !== 'string') return console.error('Version should be string');
+
+    if (!guid) {
+      guid = `guid${this.#count}`;
+      this.#count++;
+    }
+
+    try {
+      const Plugin = this.getPlugin(name, version);
+      const instance = new Plugin(guid);
+      // for autocomplete
+      this.#autocomplete[`${name}_${guid}`] = instance;
+
+      this.#guids[guid] = { ...Plugin.getRegistrationMeta(), instance };
+
+      this.#systems[`${name}${version}`] = instance;
+
+      if (instance.init) await instance.init();
+
+      return instance;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  installPanel({ name, version, guid, selector }) {
+    if (!name || !version || !selector) {
+      return console.error(
+        `Name, version and selector should be specified in order to install panel!`
+      );
+    }
+
+    if (typeof name !== 'string') return console.error('Name should be string');
+    if (typeof version !== 'string') return console.error('Version should be string');
+    if (typeof selector !== 'string') return console.error('Selector should be string');
+
+    if (!guid) {
+      guid = `guid${this.#count}`;
+      this.#count++;
+    }
+    const Plugin = this.getPlugin(name, version);
+    const instance = new Plugin(guid, selector);
     // for autocomplete
-    this.#autocomplete[`${name}_${nextGUID}`] = instance;
+    this.#autocomplete[`${name}_${guid}`] = instance;
 
-    this.#guids[nextGUID] = instance;
+    this.#guids[guid] = { ...Plugin.getRegistrationMeta(), instance };
     return instance;
   }
 
@@ -146,11 +189,11 @@ export default class Application {
     const nextGUID = `guid${this.#count}`;
     this.#count++;
     const targetExtensionList = this.#extensions[target];
-    const { plugin: Plugin } = targetExtensionList.find(extPlg => extPlg.name === pluginName);
-    const instance = new Plugin(nextGUID, ...args);
+    const extension = targetExtensionList.find(extPlg => extPlg.name === pluginName);
+    const instance = new extension.plugin(nextGUID, ...args);
     // for autocomplete
     this.#autocomplete[`${pluginName}_${nextGUID}`] = instance;
-    this.#guids[nextGUID] = instance;
+    this.#guids[nextGUID] = { ...extension.getRegistrationMeta(), instance };
     return instance;
   }
 
@@ -165,7 +208,7 @@ export default class Application {
   }
 
   uninstallPluginByInstance(instance) {
-    const guid = Object.keys(this.#guids).find(key => this.#guids[key] === instance);
+    const guid = Object.keys(this.#guids).find(key => this.#guids[key].instance === instance);
     // for autocomplete
     const key = Object.keys(this.#autocomplete).find(instanceName =>
       instanceName.endsWith(`_${guid}`)
@@ -198,21 +241,37 @@ export default class Application {
       throw new Error(`Dependence ${name} not found!`);
     }
   }
-  getSystem(systemName) {
-    return this.#systems[systemName];
+
+  getSystem(name, version) {
+    if (!name || !version) {
+      throw new Error('You should specify name and version of system');
+    }
+
+    if (typeof name !== 'string') return console.error('Name should be string');
+    if (typeof version !== 'string') return console.error('Version should be string');
+
+    const system = this.#systems[`${name.trim()}${version.trim()}`];
+    if (system) return system;
+    else throw new Error(`Plugin ${name} ${version} not found!`);
   }
+
   getPanels() {
     return this.#plugins.filter(plg => plg.type === 'panel');
   }
-  getPlugin(name, type = false) {
-    try {
-      let { plugin } = this.#plugins.find(plg => {
-        return type ? plg.name === name && plg.type === type : plg.name === name;
-      });
+
+  getPlugin(name, version) {
+    if (!name || !version) {
+      throw new Error(`Name and version should be specified in order to get plugin!`);
+    }
+
+    if (typeof name !== 'string') return console.error('Name should be string');
+    if (typeof version !== 'string') return console.error('Version should be string');
+
+    let { plugin } = this.#plugins.find(plg => plg.name === name && plg.version === version);
+    if (plugin) {
       return plugin;
-    } catch (err) {
-      console.error(`Plugin ${name} not found!`);
-      throw new Error(err);
+    } else {
+      throw new Error(`Plugin ${name} ${version} not found!`);
     }
   }
 
@@ -221,11 +280,21 @@ export default class Application {
   }
 
   getInstance(guid) {
-    return this.#guids[guid];
+    return this.#guids[guid].instance;
+  }
+
+  findInstances(name, version) {
+    return Object.keys(this.#guids)
+      .filter(guid =>
+        version
+          ? this.#guids[guid].name === name && this.#guids[guid].version === version
+          : this.#guids[guid].name === name
+      )
+      .map(guid => this.#guids[guid].instance);
   }
 
   getGUID(instance) {
-    return Object.keys(this.#guids).find(guid => this.#guids[guid] === instance);
+    return Object.keys(this.#guids).find(guid => this.#guids[guid].instance === instance);
   }
 
   getGUIDList() {
