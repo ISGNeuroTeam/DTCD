@@ -8,6 +8,8 @@ export default class Application {
   #autocomplete;
 
   constructor() {
+    // TODO: Add docstrings.
+
     this.#dependencies = {};
 
     this.#plugins = [];
@@ -23,10 +25,15 @@ export default class Application {
   }
 
   get autocomplete() {
+    // TODO: Add docstrings.
+
     return this.#autocomplete;
   }
 
   async start() {
+    // TODO: Add docstrings.
+
+    // TODO: It seems that you use asynchronous functions in a synchronous way. Do we really need asynchronous functions here?
     await this.#fillPlugins();
 
     await this.#fillDependencies();
@@ -48,18 +55,25 @@ export default class Application {
   }
 
   async #fillPlugins() {
+    // TODO: Add docstrings.
+
     // Getting list of all plugins
+    // TODO: There is a query to an external system. You need to catch connection exceptions.
     const pluginList = await (await fetch('/mock_server/v1/plugins/plugins.json')).json();
 
     // Getting each module from server as module
     const modules = await Promise.all(
-      pluginList.map(pathToFile => import('/plugins/' + pathToFile))
+        // TODO: There is a query to an external system. You need to catch connection exceptions.
+        pluginList.map(pathToFile => import('/plugins/' + pathToFile))
     );
 
+    // TODO: Fix the comment bellow.
     // Plugin is what with the getRegistrationMeta method
     modules.forEach((module, index) => {
       let isPlugin = false;
 
+      // TODO: The way bellow seems to be more productive.
+      //  Object.keys(obj).filter((key) => typeof obj[key] === 'function');
       for (let key in module) {
         if (module[key].getRegistrationMeta) {
           // set flag isPlugin on module
@@ -68,16 +82,24 @@ export default class Application {
           const plugin = module[key];
           const meta = plugin.getRegistrationMeta();
           switch (meta.type) {
+            // TODO: Describe all types of plugins.
             // If type of plugin is extension add it to private property #extensions of class.
             case 'extension':
               // Target property in meta of extensions may be Array for several plugins or String for single plugin.
+              // TODO: JS is not strongly typed language but that doesn't mean we should not use this pattern.
+              //  I think using different types for the same var is not a good idea. We can simplify the code bellow if
+              //  it will be an Array in both ways.
               if (Array.isArray(meta.target)) {
                 for (let target of meta.target) {
                   if (!this.#extensions[target]) this.#extensions[target] = [];
+                  // TODO: Why do we need "transform" a meta data from a plugin? Why doesn't it provide us the meta in
+                  //  the acceptable format?
                   this.#extensions[target].push({ ...meta, plugin });
                 }
               } else {
                 if (!this.#extensions[meta.target]) this.#extensions[meta.target] = [];
+                // TODO: Why do we need "transform" a meta data from a plugin? Why doesn't it provide us the meta in
+                //  the acceptable format?
                 this.#extensions[meta.target].push({ ...meta, plugin });
               }
             default:
@@ -88,12 +110,14 @@ export default class Application {
         }
       }
       if (!isPlugin)
+        // TODO: Replace by LogSystem.
         console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
     });
   }
 
   async #fillDependencies() {
     // Getting dependencies from all plugins, that with "withDependencies" flag in meta
+    // TODO: Really? We're in the 2022nd year. Use methods of an iteration.
     for (let index = 0; index < this.#plugins.length; index++) {
       let pluginObject = this.#plugins[index];
       // Check flag
@@ -106,6 +130,7 @@ export default class Application {
         const pathToPlgDir = ['/plugins', ...splittedRelativePath].slice(0, -1);
 
         // First we get manifest.json with description of dependencies
+        // TODO: There is a query to an external system. You need to catch connection exceptions.
         let manifest = await (await fetch([...pathToPlgDir, 'manifest.json'].join('/'))).json();
 
         for (let dep of manifest) {
