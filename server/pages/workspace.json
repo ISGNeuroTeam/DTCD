@@ -1,0 +1,13 @@
+{
+  "name": "workspace",
+  "content": {
+    "title": "Workspace page",
+    "areas": {
+      "top": { "name": "HeaderPanel", "version": "0.1.0" },
+      "left": null,
+      "center": { "name": "WorkspaceSystem", "version": "0.4.0" },
+      "right": null,
+      "bottom": { "name": "FooterPanel", "version": "0.1.0" }
+    }
+  }
+}

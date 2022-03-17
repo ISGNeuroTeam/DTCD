@@ -26,20 +26,26 @@ export default class Application {
     return this.#autocomplete;
   }
 
+  get systems() {
+    return this.#systems;
+  }
+
   async start() {
     await this.#fillPlugins();
 
     await this.#fillDependencies();
 
-    let systems = this.#plugins
-      .filter(plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem')
-      .sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
+    let systems = this.#plugins.filter(
+      plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem'
+    );
 
     systems.push(
       this.#plugins
         .filter(plg => plg.name === 'WorkspaceSystem')
         .reduce((a, b) => (a.version > b.version ? a : b))
     );
+
+    systems = systems.sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
 
     for (let i = 0; i < systems.length; i++) {
       const { name, version } = systems[i];

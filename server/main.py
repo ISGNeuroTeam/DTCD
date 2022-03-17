@@ -38,6 +38,19 @@ def get_workspace_list():
             workspaces.append(configuration)
     return workspaces
 
+def get_pages():
+    list_dir_pages = os.listdir("./pages")
+    list_dir_pages.remove(".gitkeep")
+    if ".DS_Store" in list_dir_pages:
+        list_dir_pages.remove(".DS_Store")
+
+    pages=[]
+    for file_name in list_dir_pages:
+        with open(f'./pages/{file_name}', "r") as file:
+            configuration = json.loads(file.read())
+            pages.append(configuration)
+    return pages
+
 # Application
 @app.get("/", response_class=HTMLResponse)
 async def read_html():
@@ -143,6 +156,15 @@ def graph_list():
     file_list = os.listdir("./graphs")
     file_list.remove(".gitkeep")
     return [ {"name": file_name, "id": index} for index, file_name in enumerate(file_list)]
+
+
+@app.get("/pages/{pagename}")
+def pages(pagename):
+    pages = get_pages()
+    for page in pages:
+        if page['name'] == pagename:
+            return page
+    return 'error'
 
 @app.get("/mock_server/v1/workspace/object")
 def workspace_configuration(id: int = 0):
