@@ -1,7 +1,8 @@
 import os
 import json
 
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Response, Request, Cookie
+from typing import Optional
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,6 +24,27 @@ app.add_middleware(
     allow_methods=["DELETE","GET","POST","PUT"],
     allow_headers=["*"]
 )
+
+
+@app.post("/api/login")
+def login(response: Response, user: dict = Body(...)):
+    if user['login'] == 'admin' and user['password'] == 'admin':
+        response.set_cookie(key="authorization",value="Bearer mock_token", httponly=True)
+        return "logged in successfylly"
+    response.status_code = 401
+    return "wrong login or password"
+
+@app.post("/api/logout")
+def login(response: Response):
+    response.delete_cookie(key="authorization")
+    return "logged out successfully"
+
+
+@app.get("/api/isLoggedIn")
+def isLoggedIn(authorization: Optional[str] = Cookie(None)):
+    if(authorization == 'Bearer mock_token'):
+        return { "isLoggedIn": True}
+    return { "isLoggedIn": False}
 
 # Workspaces
 def get_workspace_list():
