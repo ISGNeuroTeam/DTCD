@@ -6,7 +6,7 @@
       "top": { "name": "HeaderPanel", "version": "0.1.0" },
       "left": null,
       "center": { "name": "WorkspacePanel", "version": "0.2.0" },
-      "right": null,
+      "right": { "name": "ConfigEditorPanel", "version": "0.2.0" },
       "bottom": { "name": "FooterPanel", "version": "0.1.0" }
     }
   }
