@@ -3,7 +3,17 @@
   "content": {
     "title": "Profile page",
     "areas": {
-      "top": { "name": "HeaderPanel", "version": "0.1.0" },
+      "top": {
+        "name": "HeaderPanel",
+        "version": "0.1.0",
+        "configuration": {
+          "showSettingsButton": false,
+          "showBackButton": true,
+          "showPageTitle": true,
+          "showWorkspaceSettings": false,
+          "showAddPanelButton": false
+        }
+      },
       "left": null,
       "center": null,
       "right": null,
