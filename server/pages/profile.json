@@ -15,7 +15,7 @@
         }
       },
       "left": null,
-      "center": null,
+      "center": { "name": "ProfilePanel", "version": "0.1.0"},
       "right": null,
       "bottom": { "name": "FooterPanel", "version": "0.1.0" }
     }
