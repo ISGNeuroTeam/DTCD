@@ -51,17 +51,29 @@ export default class Application {
       const { name, version } = systems[i];
       await this.#installSystem({ name, version });
     }
+
+    document.getElementById('loader').remove();
   }
 
   async #fillPlugins() {
     // Getting list of all plugins
+    // const loader = document.getElementById('loader');
     const pluginList = await (await fetch('/mock_server/v1/plugins/plugins.json')).json();
 
     // Getting each module from server as module
-    const modules = await Promise.all(
-      pluginList.map(pathToFile => import('/plugins/' + pathToFile))
-    );
+    let modules = pluginList.map(pathToFile => import('/plugins/' + pathToFile));
+    // const modulesCount = modules.length;
+    // let progress = 0;
 
+    // let func = promise => {
+    //   promise.then(() => {
+    //     progress++;
+    //     loader.innerHTML = `Loaded ${progress} of ${modulesCount}`;
+    //   });
+    //   return promise;
+    // };
+
+    modules = await Promise.all(modules);
     // Plugin is what with the getRegistrationMeta method
     modules.forEach((module, index) => {
       let isPlugin = false;
