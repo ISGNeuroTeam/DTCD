@@ -12,7 +12,7 @@ html, body {
 	height: 100%;
 	font-family: 'Proxima Nova';
 	text-align: center;
-  background-color: var(--background_main);
+  background-color: #FEFEFE;
 }
 
 #loader {
@@ -24,7 +24,7 @@ html, body {
   font-size: 24px;
   line-height: 1.7;
   margin-top: 20px;
-  color: var(--text_main);
+  color: #51515C;
 }
 
 
@@ -63,7 +63,7 @@ html, body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: var(--button_primary);
+  background-color: #0579F6;
   position: absolute;
   top: 0;
   left: 0;
