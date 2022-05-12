@@ -24,6 +24,7 @@ const plugins = [
     targets: [
       { src: './assets/*', dest: './dist' },
       { src: './src/index.html', dest: './dist' },
+      { src: './src/main.css', dest: './dist' },
     ],
   }),
   watch &&
@@ -32,6 +33,7 @@ const plugins = [
         { src: './assets/*', dest: './../public' },
         { src: './dist/*', dest: './../public' },
         { src: './src/index.html', dest: './../public' },
+        { src: './src/main.css', dest: './../public' },
       ],
     }),
   watch && livereload('./../Mock_server/plugins'),
