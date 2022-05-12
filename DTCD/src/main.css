@@ -1,22 +1,6 @@
-*, 
-*:before, 
-*:after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-	display: flex;
-	width: 100%;
-	height: 100%;
-	font-family: 'Proxima Nova';
-	text-align: center;
+body {
   background-color: #FEFEFE;
-}
-
-#loader {
-  margin: auto;
+  margin: 0;
 }
 
 .Loader_Text {
@@ -25,8 +9,8 @@ html, body {
   line-height: 1.7;
   margin-top: 20px;
   color: #51515C;
+  font-family: 'Proxima Nova';
 }
-
 
 @media (max-width: 992px) {
   .Loader_Text {
@@ -41,19 +25,18 @@ html, body {
 }
 
 .Loader__Overlay{
-  position: relative;
+  position: relative; 
   margin-bottom: 60px;
   display: flex;
+  width: 100%;
   align-items: center;
+  justify-content: center;
+  margin: auto;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .Loader{
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
   width: 100px;
   height: 100px;
   animation: rotateAnim 4s linear infinite;
