@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - html layout for loader
 - styles css for loader
+- getSystem method now returns system with higher version if no requested is registrered
 
 ## [0.4.0]
 

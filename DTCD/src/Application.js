@@ -31,33 +31,40 @@ export default class Application {
   }
 
   async start() {
-    await this.#fillPlugins();
+    try {
+      await this.#fillPlugins();
 
-    await this.#fillDependencies();
+      await this.#fillDependencies();
 
-    let systems = this.#plugins.filter(
-      plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem'
-    );
+      let systems = this.#plugins.filter(
+        plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem'
+      );
 
-    systems.push(
-      this.#plugins
-        .filter(plg => plg.name === 'WorkspaceSystem')
-        .reduce((a, b) => (a.version > b.version ? a : b))
-    );
+      systems.push(
+        this.#plugins
+          .filter(plg => plg.name === 'WorkspaceSystem')
+          .reduce((a, b) => (a.version > b.version ? a : b))
+      );
 
-    systems = systems.sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
+      systems = systems.sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
 
-    for (let i = 0; i < systems.length; i++) {
-      const { name, version } = systems[i];
-      await this.#installSystem({ name, version });
+      for (let i = 0; i < systems.length; i++) {
+        const { name, version } = systems[i];
+        await this.#installSystem({ name, version });
+      }
+
+      document.getElementById('loader').remove();
+    } catch (error) {
+      document.getElementsByClassName('Loader_Text')[0].innerHTML =
+        'Что-то пошло не так, попробуйте обновить срраницу или обратитель к администратору...';
+      console.error(error);
     }
-
-    document.getElementById('loader').remove();
   }
 
   async #fillPlugins() {
     // Getting list of all plugins
     // const loader = document.getElementById('loader');
+
     const pluginList = await (await fetch('/mock_server/v1/plugins/plugins.json')).json();
 
     // Getting each module from server as module
@@ -268,8 +275,20 @@ export default class Application {
     if (typeof name !== 'string') return console.error('Name should be string');
     if (typeof version !== 'string') return console.error('Version should be string');
 
-    const system = this.#systems[`${name.trim()}${version.trim()}`];
-    if (system) return system;
+    if (this.#systems.hasOwnProperty(`${name.trim()}${version.trim()}`))
+      return this.#systems[`${name.trim()}${version.trim()}`];
+
+    const highestVersionSystem = Object.keys(this.#systems)
+      .filter(
+        systemName =>
+          systemName.includes(name) &&
+          systemName.split(name)[1].split('.')[0] === version.split('.')[0] &&
+          systemName.split(name)[1] > version
+      )
+      .sort()
+      .reverse()[0];
+
+    if (highestVersionSystem) return this.#systems[highestVersionSystem];
     else throw new Error(`Plugin ${name} ${version} not found!`);
   }
 
@@ -285,9 +304,9 @@ export default class Application {
     if (typeof name !== 'string') return console.error('Name should be string');
     if (typeof version !== 'string') return console.error('Version should be string');
 
-    let { plugin } = this.#plugins.find(plg => plg.name === name && plg.version === version);
+    let plugin = this.#plugins.find(plg => plg.name === name && plg.version === version);
     if (plugin) {
-      return plugin;
+      return plugin.plugin;
     } else {
       throw new Error(`Plugin ${name} ${version} not found!`);
     }
