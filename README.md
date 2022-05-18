@@ -8,22 +8,29 @@ It's an application for creating configurable web interfaces over [OT.Platform](
 
 - [Node.js](https://nodejs.org/en/) LTS version 14.x.x
 - [nginx](https://nginx.org) v1.21.4
-- [complex_rest](https://github.com/ISGNeuroTeam/complex_rest) v0.1.0
-- [dtcd_mock_server](https://github.com/ISGNeuroTeam/dtcd_mockserver_plugin) v0.1.0
+- [complex_rest](https://github.com/ISGNeuroTeam/complex_rest) v1.0.2
+- [dtcd_server](https://github.com/ISGNeuroTeam/dtcd_server) v0.2.0
 - [jobmanager_transit](https://github.com/ISGNeuroTeam/jobsmanager_transit) v0.1.0
-- [DTCD-LogSystem](https://github.com/ISGNeuroTeam/DTCD-LogSystem) v0.4.0
-- [DTCD-EventSystem](https://github.com/ISGNeuroTeam/DTCD-EventSystem) v0.3.0
-- [DTCD-InteractionSystem](https://github.com/ISGNeuroTeam/DTCD-InteractionSystem) v0.3.0
-- [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.4.0
-- [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.3.0
-- [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.1.0
-- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.3.0
-- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.1.0
-- [DTCD-MenuPanel-FGK](https://github.com/ISGNeuroTeam/DTCD-MenuPanel-FGK) v0.1.0
+- [DTCD-LogSystem](https://github.com/ISGNeuroTeam/DTCD-LogSystem) v0.5.0
+- [DTCD-AppGUISystem](https://github.com/ISGNeuroTeam/DTCD-AppGUISystem) v0.1.0
+- [DTCD-AuthSystem](https://github.com/ISGNeuroTeam/DTCD-AuthSystem) v0.1.0
+- [DTCD-RouteSystem](https://github.com/ISGNeuroTeam/DTCD-RouteSystem) v0.1.0
+- [DTCD-EventSystem](https://github.com/ISGNeuroTeam/DTCD-EventSystem) v0.4.0
+- [DTCD-InteractionSystem](https://github.com/ISGNeuroTeam/DTCD-InteractionSystem) v0.4.0
+- [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.5.0
+- [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.5.0
+- [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.3.0
+- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.5.0
+- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.3.0
+- [DTCD-AuthPanel](https://github.com/ISGNeuroTeam/DTCD-AuthPanel) v0.1.0
+- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.1.0
+- [DTCD-FooterPanel](https://github.com/ISGNeuroTeam/DTCD-FooterPanel) v0.1.0
+- [DTCD-ConfigEditorPanel](https://github.com/ISGNeuroTeam/DTCD-ConfigEditorPanel) v0.3.0
+- [DTCD-ProfilePanel](https://github.com/ISGNeuroTeam/DTCD-ProfilePanel) v0.1.0
 
 ### Installing
 
-In order to install DTCD firstly you need to deploy _complex_rest_ with it's plugins: _dtcd_mock_server_ and _jobmanager_transit_. How to deploy _complex_rest_ you can see in it's [repository](https://github.com/ISGNeuroTeam/complex_rest).
+In order to install DTCD firstly you need to deploy _complex_rest_ with it's plugins: _dtcd_server_ and _jobmanager_transit_. How to deploy _complex_rest_ and plugins you can see in it's [repository](https://github.com/ISGNeuroTeam/complex_rest).
 
 1. Build DTCD application:
 
