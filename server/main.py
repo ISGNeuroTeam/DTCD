@@ -1,7 +1,8 @@
 import os
 import json
 
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Response, Request, Cookie
+from typing import Optional
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,6 +25,27 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+
+@app.post("/api/login")
+def login(response: Response, user: dict = Body(...)):
+    if user['login'] == 'admin' and user['password'] == 'admin':
+        response.set_cookie(key="authorization",value="Bearer mock_token", httponly=True)
+        return "logged in successfylly"
+    response.status_code = 401
+    return "wrong login or password"
+
+@app.post("/api/logout")
+def login(response: Response):
+    response.delete_cookie(key="authorization")
+    return "logged out successfully"
+
+
+@app.get("/api/isLoggedIn")
+def isLoggedIn(authorization: Optional[str] = Cookie(None)):
+    if(authorization == 'Bearer mock_token'):
+        return { "isLoggedIn": True}
+    return { "isLoggedIn": False}
+
 # Workspaces
 def get_workspace_list():
     list_dir_workspaces = os.listdir("./workspaces")
@@ -37,6 +59,19 @@ def get_workspace_list():
             configuration = json.loads(file.read())
             workspaces.append(configuration)
     return workspaces
+
+def get_pages():
+    list_dir_pages = os.listdir("./pages")
+    list_dir_pages.remove(".gitkeep")
+    if ".DS_Store" in list_dir_pages:
+        list_dir_pages.remove(".DS_Store")
+
+    pages=[]
+    for file_name in list_dir_pages:
+        with open(f'./pages/{file_name}', "r") as file:
+            configuration = json.loads(file.read())
+            pages.append(configuration)
+    return pages
 
 # Application
 @app.get("/", response_class=HTMLResponse)
@@ -143,6 +178,15 @@ def graph_list():
     file_list = os.listdir("./graphs")
     file_list.remove(".gitkeep")
     return [ {"name": file_name, "id": index} for index, file_name in enumerate(file_list)]
+
+
+@app.get("/pages/{pagename}")
+def pages(pagename):
+    pages = get_pages()
+    for page in pages:
+        if page['name'] == pagename:
+            return page
+    return 'error'
 
 @app.get("/mock_server/v1/workspace/object")
 def workspace_configuration(id: int = 0):

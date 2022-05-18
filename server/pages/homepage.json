@@ -1,0 +1,23 @@
+{
+  "name": "workspaces",
+  "content": {
+    "title": "App main page",
+    "areas": {
+      "top": {
+        "name": "HeaderPanel",
+        "version": "0.1.0",
+        "configuration": {
+          "showSettingsButton": true,
+          "showBackButton": false,
+          "showPageTitle": true,
+          "showWorkspaceSettings": false,
+          "showAddPanelButton": false
+        }
+      },
+      "left": null,
+      "center": { "name": "WorkspacePanel", "version": "0.2.0" },
+      "right": { "name": "ConfigEditorPanel", "version": "0.2.0" },
+      "bottom": { "name": "FooterPanel", "version": "0.1.0" }
+    }
+  }
+}

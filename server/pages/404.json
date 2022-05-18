@@ -1,0 +1,13 @@
+{
+  "name": "404",
+  "content": {
+    "title": "404 page",
+    "areas": {
+      "top": null,
+      "left": null,
+      "center": null,
+      "right": null,
+      "bottom": { "name": "FooterPanel", "version": "0.1.0" }
+    }
+  }
+}
