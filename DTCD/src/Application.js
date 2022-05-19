@@ -56,7 +56,7 @@ export default class Application {
       document.getElementById('loader').remove();
     } catch (error) {
       document.getElementsByClassName('Loader_Text')[0].innerHTML =
-        'Что-то пошло не так, попробуйте обновить срраницу или обратитель к администратору...';
+        'Что-то пошло не так, попробуйте обновить страницу или обратитесь к администратору...';
       console.error(error);
     }
   }
