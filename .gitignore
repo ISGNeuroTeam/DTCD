@@ -24,3 +24,5 @@ server/workspaces/
 
 # logs
 *.log
+
+.DS_store
