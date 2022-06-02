@@ -316,6 +316,14 @@ export default class Application {
     return this.#extensions[targetName];
   }
 
+  resetSystems() {
+    Object.keys(this.#systems).forEach(system => {
+      if (typeof this.#systems[system].resetSystem === 'function') {
+        this.#systems[system].resetSystem();
+      }
+    });
+  }
+
   getInstance(guid) {
     return this.#guids[guid].instance;
   }
