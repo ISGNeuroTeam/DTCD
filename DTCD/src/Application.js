@@ -1,3 +1,5 @@
+import { version } from './../package.json';
+
 export default class Application {
   #dependencies;
   #plugins;
@@ -20,6 +22,10 @@ export default class Application {
     this.#autocomplete = {};
 
     window.Application = this;
+  }
+
+  get version() {
+    return version;
   }
 
   get autocomplete() {
