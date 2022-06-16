@@ -2,8 +2,6 @@ server {
     listen _PORT_;
     server_name     _DOMAIN_NAME_;
     charset     utf-8;
-
-    client_max_body_size 75M;
     
     root _PATH_TO_DTCD_PUBLIC_DIRECTORY_;
 
@@ -13,7 +11,7 @@ server {
     }
 
     location / {
-        index index.html;
+        try_files $uri $uri/ $uri.html /index.html;
     }
 
     location ~ ^/cache {
@@ -25,8 +23,16 @@ server {
         proxy_pass _URL_TO_COMPLEX_REST_;   
     }
 
-    location ^~ /mock_server/v1/ {
-        proxy_pass _URL_TO_COMPLEX_REST_; 
+     location ^~ /auth/ {
+        proxy_pass  _URL_TO_COMPLEX_REST_;
+    }
+
+    location /mock_server/v1/ {
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_server/v1/; 
+    }
+
+    location /api/auth/login {
+        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/auth/login;
     }
 
     location /api/makejob {

@@ -1,0 +1,24 @@
+{
+  "name": "workspace",
+  "content": {
+    "title": "Workspace page",
+    "areas": {
+      "top": {
+        "name": "HeaderPanel",
+        "version": "0.2.0",
+        "configuration": {
+          "showSettingsButton": true,
+          "showBackButton": true,
+          "showPageTitle": true,
+          "showWorkspaceSettings": true,
+          "showAddPanelButton": true,
+          "showPanelSelect": true
+        }
+      },
+      "left": null,
+      "center": { "name": "WorkspaceSystem", "version": "0.6.0" },
+      "right": { "name": "ConfigEditorPanel", "version": "0.4.0" },
+      "bottom": null
+    }
+  }
+}

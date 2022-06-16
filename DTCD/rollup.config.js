@@ -5,6 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import replace from '@rollup/plugin-replace';
 import copy from 'rollup-plugin-copy';
 import babel from '@rollup/plugin-babel';
+import json from '@rollup/plugin-json';
 
 const watch = Boolean(process.env.ROLLUP_WATCH) || Boolean(process.env.LIVERELOAD);
 
@@ -14,6 +15,7 @@ const plugins = [
   babel({ babelHelpers: 'bundled' }),
   //for require, module.exports syntax
   commonjs(),
+  json(),
   postcss(),
   replace({
     preventAssignment: true,

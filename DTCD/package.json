@@ -1,6 +1,6 @@
 {
   "name": "dtcd",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-html": "^0.2.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@rollup/plugin-replace": "^2.3.4",
     "@types/jest": "^26.0.20",
