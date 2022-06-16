@@ -1,0 +1,23 @@
+{
+  "name": "profile",
+  "content": {
+    "title": "Profile page",
+    "areas": {
+      "top": {
+        "name": "HeaderPanel",
+        "version": "0.2.0",
+        "configuration": {
+          "showSettingsButton": false,
+          "showBackButton": true,
+          "showPageTitle": true,
+          "showWorkspaceSettings": false,
+          "showAddPanelButton": false
+        }
+      },
+      "left": null,
+      "center": { "name": "ProfilePanel", "version": "0.2.0" },
+      "right": null,
+      "bottom": { "name": "FooterPanel", "version": "0.2.0" }
+    }
+  }
+}

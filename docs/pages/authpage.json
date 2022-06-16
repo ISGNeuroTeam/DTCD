@@ -1,0 +1,13 @@
+{
+  "name": "authpage",
+  "content": {
+    "title": "Workspace page",
+    "areas": {
+      "top": null,
+      "left": null,
+      "center": { "name": "AuthPanel", "version": "0.2.0" },
+      "right": null,
+      "bottom": { "name": "FooterPanel", "version": "0.2.0" }
+    }
+  }
+}
