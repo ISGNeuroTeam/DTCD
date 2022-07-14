@@ -71,7 +71,7 @@ export default class Application {
     // Getting list of all plugins
     // const loader = document.getElementById('loader');
 
-    const pluginList = await (await fetch('/mock_server/v1/plugins/plugins.json')).json();
+    const pluginList = await (await fetch('/dtcd_utils/v1/plugins/plugins.json')).json();
 
     // Getting each module from server as module
     let modules = pluginList.map(pathToFile => import('/plugins/' + pathToFile));
