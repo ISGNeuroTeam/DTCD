@@ -14,6 +14,7 @@ server/graphs/*
 !server/graphs/.gitkeep
 
 server/plugins/*
+server/rawPrimitives/*
 !server/plugins/.gitkeep
 
 server/workspaces/
