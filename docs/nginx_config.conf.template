@@ -10,6 +10,11 @@ server {
 	    autoindex on;
     }
 
+    location /rawPrimitives {
+        alias _PATH_TO_DTCD_rawPrimitives_DIRECTORY_;
+	    autoindex on;
+    }
+
     location / {
         try_files $uri $uri/ $uri.html /index.html;
     }
@@ -27,23 +32,31 @@ server {
         proxy_pass  _URL_TO_COMPLEX_REST_;
     }
 
-    location /mock_server/v1/ {
-        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_server/v1/; 
+    location ^~ /dtcd_workspaces {
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_workspaces;
+    }
+
+    location ^~ /dtcd_utils {
+       proxy_pass _URL_TO_COMPLEX_REST_/dtcd_utils;
+    }
+    
+    location ^~ /supergraph {
+        proxy_pass _URL_TO_COMPLEX_REST_/supergraph;
     }
 
     location /api/auth/login {
-        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/auth/login;
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_jobsmanager/v1/auth/login;
     }
 
     location /api/makejob {
-        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/makejob;
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_jobsmanager/v1/makejob;
     }
 
     location /api/checkjob {
-        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/checkjob;
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_jobsmanager/v1/checkjob;
     }
 
     location /api/getresult {
-        proxy_pass _URL_TO_COMPLEX_REST_/jobsmanager_transit/v1/getresult;
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_jobsmanager/v1/getresult;
     }
 }

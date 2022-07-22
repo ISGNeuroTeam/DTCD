@@ -39,6 +39,7 @@ build: $(PROJECT_NAME)/node_modules $(COMPONENTS)
 	mkdir build
 	mkdir build/public
 	cp -r ./$(PROJECT_NAME)/dist/* ./build/public
+	cp -r ./docs build/
 	cp README.md build/
 	cp CHANGELOG.md build/
 	cp LICENSE.md build/
