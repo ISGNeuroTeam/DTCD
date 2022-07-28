@@ -2,7 +2,7 @@ server {
     listen _PORT_;
     server_name     _DOMAIN_NAME_;
     charset     utf-8;
-    
+
     root _PATH_TO_DTCD_PUBLIC_DIRECTORY_;
 
     location /plugins {
@@ -19,13 +19,12 @@ server {
         try_files $uri $uri/ $uri.html /index.html;
     }
 
-    location ~ ^/cache {
-        proxy_pass_header Server;
-        proxy_set_header Host $http_host;
-        proxy_redirect off;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Scheme $scheme;
-        proxy_pass _URL_TO_COMPLEX_REST_;   
+    location /cache {
+        alias /opt/otp/caches;
+        sendfile on;
+        sendfile_max_chunk 1m;
+        tcp_nopush on;
+        try_files $uri index.html;
     }
 
      location ^~ /auth/ {
@@ -39,7 +38,7 @@ server {
     location ^~ /dtcd_utils {
        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_utils;
     }
-    
+
     location ^~ /supergraph {
         proxy_pass _URL_TO_COMPLEX_REST_/supergraph;
     }
