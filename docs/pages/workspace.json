@@ -17,7 +17,7 @@
       },
       "left": null,
       "center": { "name": "WorkspaceSystem", "version": "0.7.0" },
-      "right": { "name": "ConfigEditorPanel", "version": "0.5.0" },
+      "right": { "name": "ConfigEditorPanel", "version": "0.6.0" },
       "bottom": null
     }
   }

@@ -27,20 +27,12 @@ server {
         try_files $uri index.html;
     }
 
-     location ^~ /auth/ {
+    location ^~ /dtcd_jobsmanager/v1/ {
+        proxy_pass _URL_TO_COMPLEX_REST_;
+    }
+
+    location ^~ /auth/ {
         proxy_pass  _URL_TO_COMPLEX_REST_;
-    }
-
-    location ^~ /dtcd_workspaces {
-        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_workspaces;
-    }
-
-    location ^~ /dtcd_utils {
-       proxy_pass _URL_TO_COMPLEX_REST_/dtcd_utils;
-    }
-
-    location ^~ /supergraph {
-        proxy_pass _URL_TO_COMPLEX_REST_/supergraph;
     }
 
     location /api/auth/login {
@@ -58,4 +50,21 @@ server {
     location /api/getresult {
         proxy_pass _URL_TO_COMPLEX_REST_/dtcd_jobsmanager/v1/getresult;
     }
+
+    location ^~ /dtcd_utils {
+       proxy_pass _URL_TO_COMPLEX_REST_/dtcd_utils;
+    }
+
+    location ^~ /dtcd_workspaces {
+        proxy_pass _URL_TO_COMPLEX_REST_/dtcd_workspaces;
+    }
+
+    location ^~ /supergraph {
+        proxy_pass _URL_TO_COMPLEX_REST_/complex_rest_dtcd_supergraph;
+    }
+
+    location /id_generator/v1/ {
+        proxy_pass _URL_TO_COMPLEX_REST_/id_generator/v1/;
+    }
+
 }
