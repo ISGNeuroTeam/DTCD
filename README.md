@@ -9,10 +9,11 @@ It's an application for creating configurable web interfaces over [OT.Platform](
 - [Node.js](https://nodejs.org/en/) LTS version 14.x.x
 - [nginx](https://nginx.org) v1.21.4
 - [complex_rest](https://github.com/ISGNeuroTeam/complex_rest) v1.1.2
-- [complex_rest_dtcd_utils](https://github.com/ISGNeuroTeam/complex_rest_dtcd_utils) v1.1.0
+- [complex_rest_dtcd_utils](https://github.com/ISGNeuroTeam/complex_rest_dtcd_utils) v1.2.0
 - [complex_rest_dtcd_jobsmanager](https://github.com/ISGNeuroTeam/complex_rest_dtcd_jobsmanager) v0.2.0
-- [complex_rest_dtcd_supergraph](https://github.com/ISGNeuroTeam/complex_rest_dtcd_supergraph) v0.2.0
-- [complex_rest_dtcd_workspaces](https://github.com/ISGNeuroTeam/complex_rest_dtcd_workspaces) v0.2.3
+- [complex_rest_dtcd_supergraph](https://github.com/ISGNeuroTeam/complex_rest_dtcd_supergraph) v0.3.1
+- [complex_rest_dtcd_workspaces](https://github.com/ISGNeuroTeam/complex_rest_dtcd_workspaces) v0.2.4
+- [complex_rest_id_generator](https://github.com/ISGNeuroTeam/complex_rest_id_generator) v0.1.0
 - [DTCD-LogSystem](https://github.com/ISGNeuroTeam/DTCD-LogSystem) v0.6.0
 - [DTCD-AppGUISystem](https://github.com/ISGNeuroTeam/DTCD-AppGUISystem) v0.3.0
 - [DTCD-AuthSystem](https://github.com/ISGNeuroTeam/DTCD-AuthSystem) v0.1.0
