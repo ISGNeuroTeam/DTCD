@@ -218,9 +218,7 @@ export default class Application {
   }
 
   uninstallPluginByGUID(guid) {
-    // for autocomplete
-    const key = Object.keys(this.#autocomplete).find(instanceName => instanceName.endsWith(`_${guid}`));
-    delete this.#autocomplete[key];
+    delete this.#autocomplete[guid];
     delete this.#guids[guid];
     return true;
   }
