@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- aliases for systems without version to simplify interaction with them
+
 ### Changed
 
 - guid format for panels and systems
-- added aliases for systems without version to simplify interaction with them
 
 ## [0.9.1]
 
