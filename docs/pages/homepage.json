@@ -15,7 +15,7 @@
         }
       },
       "left": null,
-      "center": { "name": "WorkspacePanel", "version": "0.6.1" },
+      "center": { "name": "WorkspacePanel", "version": "0.7.0" },
       "right": { "name": "ConfigEditorPanel", "version": "0.6.0" },
       "bottom": { "name": "FooterPanel", "version": "0.2.0" }
     }
