@@ -233,6 +233,9 @@ export default class Application {
     const key = Object.keys(this.#autocomplete).find(instanceName =>
       instanceName.endsWith(`_${guid}`)
     );
+    if (typeof this.#guids[guid].beforeUninstall === 'function') {
+      this.#guids[guid].beforeUninstall();
+    }
     delete this.#autocomplete[key];
     delete this.#guids[guid];
     return true;
@@ -245,6 +248,9 @@ export default class Application {
       instanceName.endsWith(`_${guid}`)
     );
 
+    if (typeof instance.beforeUninstall === 'function') {
+      instance.beforeUninstall();
+    }
     delete this.#autocomplete[key];
     delete this.#guids[guid];
     return true;
