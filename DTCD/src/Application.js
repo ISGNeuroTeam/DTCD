@@ -218,13 +218,16 @@ export default class Application {
   }
 
   uninstallPluginByGUID(guid) {
-    delete this.#autocomplete[guid];
-    delete this.#guids[guid];
-    return true;
+    const { instance } = this.#guids[guid];
+    this.uninstallPluginByInstance(instance);
   }
 
   uninstallPluginByInstance(instance) {
     const guid = Object.keys(this.#guids).find(key => this.#guids[key].instance === instance);
+
+    if (typeof instance.beforeUninstall === 'function') {
+      instance.beforeUninstall();
+    }
 
     delete this.#autocomplete[guid];
     delete this.#guids[guid];
