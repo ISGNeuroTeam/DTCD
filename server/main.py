@@ -26,30 +26,11 @@ app.add_middleware(
 )
 
 
-@app.post("/api/login")
-def login(response: Response, user: dict = Body(...)):
-    if user['login'] == 'admin' and user['password'] == 'admin':
-        response.set_cookie(key="authorization",value="Bearer mock_token", httponly=True)
-        return "logged in successfylly"
-    response.status_code = 401
-    return "wrong login or password"
-
-@app.post("/api/logout")
-def login(response: Response):
-    response.delete_cookie(key="authorization")
-    return "logged out successfully"
-
-
-@app.get("/api/isLoggedIn")
-def isLoggedIn(authorization: Optional[str] = Cookie(None)):
-    if(authorization == 'Bearer mock_token'):
-        return { "isLoggedIn": True}
-    return { "isLoggedIn": False}
-
 # Workspaces
 def get_workspace_list():
     list_dir_workspaces = os.listdir("./workspaces")
-    list_dir_workspaces.remove(".gitkeep")
+    if ".gitkeep" in list_dir_workspaces:
+        list_dir_workspaces.remove(".gitkeep")
     if ".DS_Store" in list_dir_workspaces:
         list_dir_workspaces.remove(".DS_Store")
 
@@ -61,16 +42,16 @@ def get_workspace_list():
     return workspaces
 
 def get_pages():
-    list_dir_pages = os.listdir("./pages")
-    list_dir_pages.remove(".gitkeep")
+    list_dir_pages = os.listdir("../docs/pages")
+
     if ".DS_Store" in list_dir_pages:
         list_dir_pages.remove(".DS_Store")
 
-    pages=[]
+    pages= {}
     for file_name in list_dir_pages:
-        with open(f'./pages/{file_name}', "r") as file:
+        with open(f'./../docs/pages/{file_name}', "r") as file:
             configuration = json.loads(file.read())
-            pages.append(configuration)
+            pages[file_name.split('.')[0]]=  configuration
     return pages
 
 # Application
@@ -117,75 +98,11 @@ def design_obejct():
         data = json.load(file)
         return data
 
-# graph
-@app.post("/v2/graphContent/save")
-def save_graph(graphs: list = Body(...)):
-    count = 0
-    for graph in graphs:
-        if not (graph["name"]) in os.listdir("./graphs"):
-            with open(os.path.join("./graphs/",graph["name"]), "w") as file:
-                file.write(graph["content"])
-            count+=1
-    if count==len(graphs):
-        return {"status":"SUCCESS", "code":200, "count": str(len(graphs))}
-    else:
-        return {"status":"ERROR", "count": count}
-
-@app.put("/v2/graphContent/update")
-def update_graph(graphs: list = Body(...)):
-    count = 0
-    file_list = os.listdir("./graphs")
-    file_list.remove(".gitkeep")
-    for graph in graphs:
-        if file_list[graph["id"]]:
-            if "content" in graph:
-                with open(os.path.join("./graphs/",graph["name"]), "w") as file:
-                    file.write(graph["content"])
-            if "name" in graph:
-                source = "./graphs/%s" % file_list[graph["id"]]
-                target = "./graphs/%s" % graph["name"]
-                os.rename(source, target)
-            count+=1
-    if count==len(graphs):
-        return {"status":"SUCCESS","count":count}
-    else:
-        return {"status":"ERROR", "count": count}
-
-@app.delete("/v2/graphContent/delete")
-def delete_graph(ids: list = Body(...)):
-    print(ids)
-    file_list = os.listdir("./graphs")
-    file_list.remove(".gitkeep")
-    count=0
-    for id in ids:
-        os.remove("./graphs/%s" % file_list[id])
-        count+=1
-    if count == len(ids):
-        return {"status":"SUCCESS","count": count}
-    else:
-        return {"status":"ERROR", "count": count}
-
-@app.get("/v2/graphContent/load")
-def load_graph(id: int = 0):
-    file_list = os.listdir("./graphs")
-    file_list.remove(".gitkeep")
-    with open("./graphs/%s" % file_list[id], 'r') as file:
-        content = file.read()
-    return {"id": id, "name": file_list[id], "content": content, "status": "SUCCESS"}
-
-@app.get("/v2/graph/list")
-def graph_list():
-    file_list = os.listdir("./graphs")
-    file_list.remove(".gitkeep")
-    return [ {"name": file_name, "id": index} for index, file_name in enumerate(file_list)]
-
-
-@app.get("/pages/{pagename}")
+@app.get("/dtcd_utils/v1/page/{pagename}")
 def pages(pagename):
     pages = get_pages()
-    for page in pages:
-        if page['name'] == pagename:
-            return page
+    if pagename in pages:
+        return pages[pagename]
     return 'error'
 
 @app.get("/mock_server/v1/workspace/object")
