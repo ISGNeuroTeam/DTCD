@@ -257,29 +257,40 @@ export default class Application {
     }
   }
 
-  getSystem(name, version) {
-    if (!name || !version) {
+  getSystem(systemName, version) {
+    if (!systemName || !version) {
       throw new Error('You should specify name and version of system');
     }
 
-    if (typeof name !== 'string') return console.error('Name should be string');
+    if (typeof systemName !== 'string') return console.error('Name should be string');
     if (typeof version !== 'string') return console.error('Version should be string');
 
-    if (this.#systems.hasOwnProperty(`${name.trim()}${version.trim()}`))
-      return this.#systems[`${name.trim()}${version.trim()}`];
+    if (this.#systems.hasOwnProperty(`${systemName.trim()}${version.trim()}`))
+      return this.#systems[`${systemName.trim()}${version.trim()}`];
 
     const highestVersionSystem = Object.keys(this.#systems)
-      .filter(
-        systemName =>
-          systemName.includes(name) &&
-          systemName.split(name)[1].split('.')[0] === version.split('.')[0] &&
-          systemName.split(name)[1] > version
-      )
+      .filter(system => {
+        if (!system.includes(systemName)) return false;
+
+        const systemVersion = system.split(systemName)[1];
+        const [major, minor, micro] = systemVersion.split('.');
+        const [majorRequested, minorRequested, microRequested] = version.split('.');
+
+        if (parseInt(major) !== parseInt(majorRequested)) return false;
+
+        if (parseInt(minor) < parseInt(minorRequested)) return false;
+
+        if (parseInt(micro) < parseInt(microRequested)) return false;
+
+        return true;
+      })
       .sort()
-      .reverse()[0];
+      .pop();
+
+    console.log(highestVersionSystem);
 
     if (highestVersionSystem) return this.#systems[highestVersionSystem];
-    else throw new Error(`Plugin ${name} ${version} not found!`);
+    else throw new Error(`Plugin ${systemName} ${version} not found!`);
   }
 
   getPanels() {

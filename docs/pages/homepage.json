@@ -5,7 +5,7 @@
     "areas": {
       "top": {
         "name": "HeaderPanel",
-        "version": "0.4.0",
+        "version": "0.5.0",
         "configuration": {
           "showSettingsButton": true,
           "showBackButton": false,
@@ -15,8 +15,8 @@
         }
       },
       "left": null,
-      "center": { "name": "WorkspacePanel", "version": "0.7.0" },
-      "right": { "name": "ConfigEditorPanel", "version": "0.6.0" },
+      "center": { "name": "WorkspacePanel", "version": "0.8.0" },
+      "right": { "name": "ConfigEditorPanel", "version": "0.7.0" },
       "bottom": { "name": "FooterPanel", "version": "0.2.0" }
     }
   }
