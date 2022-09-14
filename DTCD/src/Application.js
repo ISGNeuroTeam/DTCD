@@ -275,19 +275,18 @@ export default class Application {
         const systemVersion = system.split(systemName)[1];
         const [major, minor, micro] = systemVersion.split('.');
         const [majorRequested, minorRequested, microRequested] = version.split('.');
+        // exists -  0.9.0
+        // request - 0.8.1
+        if (+major !== +majorRequested) return false;
 
-        if (parseInt(major) !== parseInt(majorRequested)) return false;
+        if (+minor < +minorRequested) return false;
 
-        if (parseInt(minor) < parseInt(minorRequested)) return false;
-
-        if (parseInt(micro) < parseInt(microRequested)) return false;
+        if (+micro < +microRequested && +minor === +minorRequested) return false;
 
         return true;
       })
       .sort()
       .pop();
-
-    console.log(highestVersionSystem);
 
     if (highestVersionSystem) return this.#systems[highestVersionSystem];
     else throw new Error(`Plugin ${systemName} ${version} not found!`);
