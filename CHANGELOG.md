@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0]
+
+### Added
+
+- aliases for systems without version to simplify interaction with them
+- method `beforeUninstall` which is called before removing plugins
+
+### Changed
+
+- guid format for panels and systems
+
+### Fixed
+
+- error with plugin version comparison
+
 ## [0.10.0]
 
 ### Changed

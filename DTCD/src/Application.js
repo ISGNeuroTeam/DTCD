@@ -42,14 +42,10 @@ export default class Application {
 
       await this.#fillDependencies();
 
-      let systems = this.#plugins.filter(
-        plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem'
-      );
+      let systems = this.#plugins.filter(plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem');
 
       systems.push(
-        this.#plugins
-          .filter(plg => plg.name === 'WorkspaceSystem')
-          .reduce((a, b) => (a.version > b.version ? a : b))
+        this.#plugins.filter(plg => plg.name === 'WorkspaceSystem').reduce((a, b) => (a.version > b.version ? a : b))
       );
 
       systems = systems.sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
@@ -118,8 +114,7 @@ export default class Application {
           }
         }
       }
-      if (!isPlugin)
-        console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
+      if (!isPlugin) console.error(`Plugin ${pluginList[index]} without static method getRegistrationMeta`);
     });
   }
 
@@ -154,14 +149,13 @@ export default class Application {
           const dependence = this.#dependencies[dep.name];
           const pathToDependence = [...pathToPlgDir, 'dependencies', dep.fileName].join('/');
           if (!dependence[dep.type]) dependence[dep.type] = {};
-          if (!dependence[dep.type][dep.version])
-            dependence[dep.type][dep.version] = await import(pathToDependence);
+          if (!dependence[dep.type][dep.version]) dependence[dep.type][dep.version] = await import(pathToDependence);
         }
       }
     }
   }
 
-  async #installSystem({ name, version, guid }) {
+  async #installSystem({ name, version }) {
     if (!name || !version) {
       return console.error(`Name and version should be specified in order to install system!`);
     }
@@ -169,16 +163,13 @@ export default class Application {
     if (typeof name !== 'string') return console.error('Name should be string');
     if (typeof version !== 'string') return console.error('Version should be string');
 
-    if (!guid) {
-      guid = `guid${this.#count}`;
-      this.#count++;
-    }
-
     try {
       const Plugin = this.getPlugin(name, version);
+      const guid = `${name}_${version.replaceAll('.', '_')}`;
       const instance = new Plugin(guid);
       // for autocomplete
-      this.#autocomplete[`${name}_${guid}`] = instance;
+      this.#autocomplete[guid] = instance;
+      this.#autocomplete[name] = instance;
 
       this.#guids[guid] = { ...Plugin.getRegistrationMeta(), instance };
 
@@ -194,9 +185,7 @@ export default class Application {
 
   installPanel({ name, version, guid, selector }) {
     if (!name || !version || !selector) {
-      return console.error(
-        `Name, version and selector should be specified in order to install panel!`
-      );
+      return console.error(`Name, version and selector should be specified in order to install panel!`);
     }
 
     if (typeof name !== 'string') return console.error('Name should be string');
@@ -210,7 +199,7 @@ export default class Application {
     const Plugin = this.getPlugin(name, version);
     const instance = new Plugin(guid, selector);
     // for autocomplete
-    this.#autocomplete[`${name}_${guid}`] = instance;
+    this.#autocomplete[guid] = instance;
 
     this.#guids[guid] = { ...Plugin.getRegistrationMeta(), instance };
     return instance;
@@ -229,23 +218,18 @@ export default class Application {
   }
 
   uninstallPluginByGUID(guid) {
-    // for autocomplete
-    const key = Object.keys(this.#autocomplete).find(instanceName =>
-      instanceName.endsWith(`_${guid}`)
-    );
-    delete this.#autocomplete[key];
-    delete this.#guids[guid];
-    return true;
+    const { instance } = this.#guids[guid];
+    this.uninstallPluginByInstance(instance);
   }
 
   uninstallPluginByInstance(instance) {
     const guid = Object.keys(this.#guids).find(key => this.#guids[key].instance === instance);
-    // for autocomplete
-    const key = Object.keys(this.#autocomplete).find(instanceName =>
-      instanceName.endsWith(`_${guid}`)
-    );
 
-    delete this.#autocomplete[key];
+    if (typeof instance.beforeUninstall === 'function') {
+      instance.beforeUninstall();
+    }
+
+    delete this.#autocomplete[guid];
     delete this.#guids[guid];
     return true;
   }
@@ -273,29 +257,39 @@ export default class Application {
     }
   }
 
-  getSystem(name, version) {
-    if (!name || !version) {
+  getSystem(systemName, version) {
+    if (!systemName || !version) {
       throw new Error('You should specify name and version of system');
     }
 
-    if (typeof name !== 'string') return console.error('Name should be string');
+    if (typeof systemName !== 'string') return console.error('Name should be string');
     if (typeof version !== 'string') return console.error('Version should be string');
 
-    if (this.#systems.hasOwnProperty(`${name.trim()}${version.trim()}`))
-      return this.#systems[`${name.trim()}${version.trim()}`];
+    if (this.#systems.hasOwnProperty(`${systemName.trim()}${version.trim()}`))
+      return this.#systems[`${systemName.trim()}${version.trim()}`];
 
     const highestVersionSystem = Object.keys(this.#systems)
-      .filter(
-        systemName =>
-          systemName.includes(name) &&
-          systemName.split(name)[1].split('.')[0] === version.split('.')[0] &&
-          systemName.split(name)[1] > version
-      )
+      .filter(system => {
+        if (!system.includes(systemName)) return false;
+
+        const systemVersion = system.split(systemName)[1];
+        const [major, minor, micro] = systemVersion.split('.');
+        const [majorRequested, minorRequested, microRequested] = version.split('.');
+        // exists -  0.9.0
+        // request - 0.8.1
+        if (+major !== +majorRequested) return false;
+
+        if (+minor < +minorRequested) return false;
+
+        if (+micro < +microRequested && +minor === +minorRequested) return false;
+
+        return true;
+      })
       .sort()
-      .reverse()[0];
+      .pop();
 
     if (highestVersionSystem) return this.#systems[highestVersionSystem];
-    else throw new Error(`Plugin ${name} ${version} not found!`);
+    else throw new Error(`Plugin ${systemName} ${version} not found!`);
   }
 
   getPanels() {
