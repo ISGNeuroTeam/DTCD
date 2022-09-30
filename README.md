@@ -8,27 +8,27 @@ It's an application for creating configurable web interfaces over [OT.Platform](
 
 - [Node.js](https://nodejs.org/en/) LTS version 14.x.x
 - [nginx](https://nginx.org) v1.21.4
-- [complex_rest](https://github.com/ISGNeuroTeam/complex_rest) v1.1.2
-- [complex_rest_dtcd_utils](https://github.com/ISGNeuroTeam/complex_rest_dtcd_utils) v1.2.0
-- [complex_rest_dtcd_jobsmanager](https://github.com/ISGNeuroTeam/complex_rest_dtcd_jobsmanager) v0.2.0
-- [complex_rest_dtcd_supergraph](https://github.com/ISGNeuroTeam/complex_rest_dtcd_supergraph) v0.3.1
-- [complex_rest_dtcd_workspaces](https://github.com/ISGNeuroTeam/complex_rest_dtcd_workspaces) v0.2.4
+- [complex_rest](https://github.com/ISGNeuroTeam/complex_rest) v1.1.3
+- [complex_rest_dtcd_utils](https://github.com/ISGNeuroTeam/complex_rest_dtcd_utils) v1.2.1
+- [complex_rest_dtcd_jobsmanager](https://github.com/ISGNeuroTeam/complex_rest_dtcd_jobsmanager) v0.3.0
+- [complex_rest_dtcd_supergraph](https://github.com/ISGNeuroTeam/complex_rest_dtcd_supergraph) v0.3.3
+- [complex_rest_dtcd_workspaces](https://github.com/ISGNeuroTeam/complex_rest_dtcd_workspaces) v0.2.6
 - [complex_rest_id_generator](https://github.com/ISGNeuroTeam/complex_rest_id_generator) v0.1.0
 - [DTCD-LogSystem](https://github.com/ISGNeuroTeam/DTCD-LogSystem) v0.7.0
-- [DTCD-AppGUISystem](https://github.com/ISGNeuroTeam/DTCD-AppGUISystem) v0.3.0
+- [DTCD-AppGUISystem](https://github.com/ISGNeuroTeam/DTCD-AppGUISystem) v0.4.0
 - [DTCD-AuthSystem](https://github.com/ISGNeuroTeam/DTCD-AuthSystem) v0.1.0
-- [DTCD-RouteSystem](https://github.com/ISGNeuroTeam/DTCD-RouteSystem) v0.3.0
-- [DTCD-EventSystem](https://github.com/ISGNeuroTeam/DTCD-EventSystem) v0.4.0
+- [DTCD-RouteSystem](https://github.com/ISGNeuroTeam/DTCD-RouteSystem) v0.4.0
+- [DTCD-EventSystem](https://github.com/ISGNeuroTeam/DTCD-EventSystem) v0.5.0
 - [DTCD-InteractionSystem](https://github.com/ISGNeuroTeam/DTCD-InteractionSystem) v0.4.0
-- [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.8.0
-- [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.8.1
-- [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.3.0
-- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.9.0
-- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.7.0
-- [DTCD-AuthPanel](https://github.com/ISGNeuroTeam/DTCD-AuthPanel) v0.3.0
-- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.4.0
+- [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.9.0
+- [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.10.0
+- [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.4.0
+- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.11.0
+- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.8.0
+- [DTCD-AuthPanel](https://github.com/ISGNeuroTeam/DTCD-AuthPanel) v0.4.0
+- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.6.0
 - [DTCD-FooterPanel](https://github.com/ISGNeuroTeam/DTCD-FooterPanel) v0.2.0
-- [DTCD-ConfigEditorPanel](https://github.com/ISGNeuroTeam/DTCD-ConfigEditorPanel) v0.6.0
+- [DTCD-ConfigEditorPanel](https://github.com/ISGNeuroTeam/DTCD-ConfigEditorPanel) v0.7.0
 - [DTCD-ProfilePanel](https://github.com/ISGNeuroTeam/DTCD-ProfilePanel) v0.3.0
 
 ### Installing
