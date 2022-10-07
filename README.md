@@ -23,10 +23,10 @@ It's an application for creating configurable web interfaces over [OT.Platform](
 - [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.9.0
 - [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.10.0
 - [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.4.0
-- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.11.0
+- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.11.1
 - [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.8.0
 - [DTCD-AuthPanel](https://github.com/ISGNeuroTeam/DTCD-AuthPanel) v0.4.0
-- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.6.0
+- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.6.1
 - [DTCD-FooterPanel](https://github.com/ISGNeuroTeam/DTCD-FooterPanel) v0.2.0
 - [DTCD-ConfigEditorPanel](https://github.com/ISGNeuroTeam/DTCD-ConfigEditorPanel) v0.7.0
 - [DTCD-ProfilePanel](https://github.com/ISGNeuroTeam/DTCD-ProfilePanel) v0.3.0
