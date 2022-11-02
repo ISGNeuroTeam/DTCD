@@ -43,6 +43,9 @@ build: $(PROJECT_NAME)/node_modules $(COMPONENTS)
 	cp README.md build/
 	cp CHANGELOG.md build/
 	cp LICENSE.md build/
+	if [ -f RELEASENOTES.md ];\
+		then cp RELEASENOTES.md ./build/;\
+	fi
 
 clean:
 	# required section"
@@ -57,7 +60,7 @@ test: $(PROJECT_NAME)/node_modules
 	echo "Testing..."
 	echo DTCD
 	npm run --prefix ./$(PROJECT_NAME) test
-	
+
 dev: $(PROJECT_NAME)/node_modules venv $(COMPONENTS)
 	echo Development mode!
 	npm run build --prefix ./$(PROJECT_NAME)
