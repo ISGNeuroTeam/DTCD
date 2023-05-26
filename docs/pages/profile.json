@@ -5,7 +5,7 @@
     "areas": {
       "top": {
         "name": "HeaderPanel",
-        "version": "0.7.0",
+        "version": "0.8.0",
         "configuration": {
           "showSettingsButton": false,
           "showBackButton": true,
@@ -15,7 +15,7 @@
         }
       },
       "left": null,
-      "center": { "name": "ProfilePanel", "version": "0.3.0" },
+      "center": { "name": "ProfilePanel", "version": "0.4.0" },
       "right": null,
       "bottom": { "name": "FooterPanel", "version": "0.2.0" }
     }
