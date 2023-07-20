@@ -14,20 +14,21 @@ It's an application for creating configurable web interfaces over [OT.Platform](
 - [complex_rest_dtcd_supergraph](https://github.com/ISGNeuroTeam/complex_rest_dtcd_supergraph) v0.3.3
 - [complex_rest_dtcd_workspaces](https://github.com/ISGNeuroTeam/complex_rest_dtcd_workspaces) v0.2.6
 - [complex_rest_id_generator](https://github.com/ISGNeuroTeam/complex_rest_id_generator) v0.1.0
+- [complex_rest_dtcd_simple_math_core](https://github.com/ISGNeuroTeam/complex_rest_dtcd_simple_math_core) v0.1.2
 - [DTCD-LogSystem](https://github.com/ISGNeuroTeam/DTCD-LogSystem) v0.7.0
 - [DTCD-AppGUISystem](https://github.com/ISGNeuroTeam/DTCD-AppGUISystem) v0.4.0
 - [DTCD-AuthSystem](https://github.com/ISGNeuroTeam/DTCD-AuthSystem) v0.1.0
-- [DTCD-RouteSystem](https://github.com/ISGNeuroTeam/DTCD-RouteSystem) v0.4.0
+- [DTCD-RouteSystem](https://github.com/ISGNeuroTeam/DTCD-RouteSystem) v0.5.0
 - [DTCD-EventSystem](https://github.com/ISGNeuroTeam/DTCD-EventSystem) v0.6.0
 - [DTCD-InteractionSystem](https://github.com/ISGNeuroTeam/DTCD-InteractionSystem) v0.4.0
 - [DTCD-StorageSystem](https://github.com/ISGNeuroTeam/DTCD-StorageSystem) v0.9.0
 - [DTCD-StyleSystem](https://github.com/ISGNeuroTeam/DTCD-StyleSystem) v0.14.0
 - [DTCD-DatasourceSystem](https://github.com/ISGNeuroTeam/DTCD-DatasourceSystem) v0.5.0
-- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.16.1
-- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.12.0
+- [DTCD-WorkspaceSystem](https://github.com/ISGNeuroTeam/DTCD-WorkspaceSystem) v0.17.0
+- [DTCD-WorkspacePanel](https://github.com/ISGNeuroTeam/DTCD-WorkspacePanel) v0.13.0
 - [DTCD-AuthPanel](https://github.com/ISGNeuroTeam/DTCD-AuthPanel) v0.4.0
-- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.8.0
-- [DTCD-FooterPanel](https://github.com/ISGNeuroTeam/DTCD-FooterPanel) v0.2.0
+- [DTCD-HeaderPanel](https://github.com/ISGNeuroTeam/DTCD-HeaderPanel) v0.9.0
+- [DTCD-FooterPanel](https://github.com/ISGNeuroTeam/DTCD-FooterPanel) v0.3.0
 - [DTCD-ConfigEditorPanel](https://github.com/ISGNeuroTeam/DTCD-ConfigEditorPanel) v0.10.0
 - [DTCD-ProfilePanel](https://github.com/ISGNeuroTeam/DTCD-ProfilePanel) v0.4.0
 
