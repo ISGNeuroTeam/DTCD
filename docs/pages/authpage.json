@@ -7,7 +7,7 @@
       "left": null,
       "center": { "name": "AuthPanel", "version": "0.4.0" },
       "right": null,
-      "bottom": { "name": "FooterPanel", "version": "0.2.0" }
+      "bottom": { "name": "FooterPanel", "version": "0.3.0" }
     }
   }
 }

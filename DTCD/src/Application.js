@@ -1,5 +1,7 @@
 import { version } from './../package.json';
 
+const splitVersion = v => v.split('.').map(octet => +octet);
+
 export default class Application {
   #dependencies;
   #plugins;
@@ -273,15 +275,15 @@ export default class Application {
         if (!system.includes(systemName)) return false;
 
         const systemVersion = system.split(systemName)[1];
-        const [major, minor, micro] = systemVersion.split('.');
-        const [majorRequested, minorRequested, microRequested] = version.split('.');
+        const [major, minor, micro] = splitVersion(systemVersion);
+        const [majorRequested, minorRequested, microRequested] = splitVersion(version);
         // exists -  0.9.0
         // request - 0.8.1
-        if (+major !== +majorRequested) return false;
+        if (major !== majorRequested) return false;
 
-        if (+minor < +minorRequested) return false;
+        if (minor < minorRequested) return false;
 
-        if (+micro < +microRequested && +minor === +minorRequested) return false;
+        if (micro < microRequested && minor === minorRequested) return false;
 
         return true;
       })
@@ -296,19 +298,68 @@ export default class Application {
     return this.#plugins.filter(plg => plg.type === 'panel');
   }
 
-  getPlugin(name, version) {
+  getPlugin(name = '', version = '', octetCount = 0) {
     if (!name || !version) {
       throw new Error(`Name and version should be specified in order to get plugin!`);
     }
 
-    if (typeof name !== 'string') return console.error('Name should be string');
-    if (typeof version !== 'string') return console.error('Version should be string');
+    if (typeof name !== 'string') throw new Error('Name should be string');
 
-    let plugin = this.#plugins.find(plg => plg.name === name && plg.version === version);
-    if (plugin) {
-      return plugin.plugin;
+    if (typeof version !== 'string') throw new Error('Version should be string');
+
+    if (typeof octetCount !== 'number') throw new Error('OctetCount should be number');
+
+    let requestPlugin = this.#plugins.find(plg => plg.name === name && plg.version === version);
+
+    if (octetCount <= 0) {
+      if (requestPlugin) {
+        return requestPlugin?.plugin;
+      } else {
+        throw new Error(`Plugin ${name} ${version} not found`);
+      }
+    }
+
+    if (requestPlugin) return requestPlugin?.plugin;
+
+    const [major, minor, micro] = splitVersion(version);
+
+    const similarPlugins = this.#plugins.filter(plugin => {
+      if (plugin.name === name) {
+        const [pMajor, pMinor, pMicro] = splitVersion(plugin.version);
+
+        if (pMajor !== major) return false;
+
+        const checkMicro = pMinor === minor && pMicro > micro;
+        const checkMinor = pMinor > minor && pMinor <= minor + octetCount;
+
+        if (checkMicro || checkMinor) return true;
+
+        return false;
+      }
+
+      return false;
+    });
+
+    similarPlugins.sort((a, b) => {
+      const [, aMinor, aMicro] = splitVersion(a.version);
+      const [, bMinor, bMicro] = splitVersion(b.version);
+
+      if (aMinor > bMinor) return 1;
+      if (aMinor < bMinor) return -1;
+
+      if (aMinor === bMinor) {
+        if (aMicro > bMicro) return 1;
+        if (aMicro < bMicro) return -1;
+        return 0;
+      }
+    });
+
+    requestPlugin = similarPlugins.pop();
+
+    if (requestPlugin) {
+      return requestPlugin?.plugin;
     } else {
-      throw new Error(`Plugin ${name} ${version} not found!`);
+      throw new Error(`Plugin ${name} ${version} not found`);
     }
   }
 
@@ -325,7 +376,7 @@ export default class Application {
   }
 
   getInstance(guid) {
-    return this.#guids[guid].instance;
+    return this.#guids[guid]?.instance;
   }
 
   findInstances(name, version) {
