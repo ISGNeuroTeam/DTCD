@@ -1,33 +1,29 @@
 import { version } from './../package.json';
+import { v1 as createUUID } from 'uuid';
 
 const splitVersion = v => v.split('.').map(octet => +octet);
 
 export default class Application {
-  #dependencies;
-  #plugins;
-  #extensions;
-  #systems;
-  #guids;
-  #count;
-  #autocomplete;
+  #appID = '';
+  #count = 0;
+  #plugins = [];
+  #guids = {};
+  #systems = {};
+  #extensions = {};
+  #dependencies = {};
+  #autocomplete = {};
 
   constructor() {
-    this.#dependencies = {};
-
-    this.#plugins = [];
-    this.#extensions = {};
-
-    this.#systems = {};
-
-    this.#guids = {};
-    this.#count = 0;
-    this.#autocomplete = {};
-
+    this.#appID = createUUID();
     window.Application = this;
   }
 
   get version() {
     return version;
+  }
+
+  get appID() {
+    return this.#appID;
   }
 
   get autocomplete() {
