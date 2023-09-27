@@ -130,24 +130,23 @@ export default class Application {
         const pathToPlgDir = ['/plugins', ...splittedRelativePath].slice(0, -1);
 
         // First we get manifest.json with description of dependencies
-        let manifest = await (await fetch([...pathToPlgDir, 'manifest.json'].join('/'))).json();
+        let manifest = await fetch([...pathToPlgDir, 'manifest.json'].join('/'));
+        manifest = await manifest.json();
 
-        for (let dep of manifest) {
-          /*
-					Structure of #dependencies property of Application class:
-					{
-						<name of plugin>: {
-							<type-of-module>:{
-								<version>:<module>
-							}
-						}
-					}*/
-
-          if (!this.#dependencies[dep.name]) this.#dependencies[dep.name] = {};
-          const dependence = this.#dependencies[dep.name];
-          const pathToDependence = [...pathToPlgDir, 'dependencies', dep.fileName].join('/');
-          if (!dependence[dep.type]) dependence[dep.type] = {};
-          if (!dependence[dep.type][dep.version]) dependence[dep.type][dep.version] = await import(pathToDependence);
+        for (const dep of manifest) {
+          /**
+           * Structure of #dependencies property of Application class:
+           * {
+           *    <name of plugin>: {
+           *      <type-of-module>: {
+           *        <version>: <module>
+           *      }
+           *    }
+           * }
+           */
+          const { name, type, version, fileName } = dep;
+          const pathToDependence = [...pathToPlgDir, 'dependencies', fileName].join('/');
+          await this.installDependence(name, type, version, pathToDependence);
         }
       }
     }
@@ -252,6 +251,19 @@ export default class Application {
       return module;
     } catch (e) {
       throw new Error(`Dependence ${name} not found!`);
+    }
+  }
+
+  async installDependence(name, type, version, moduleOrPath) {
+    if (!this.#dependencies[name]) this.#dependencies[name] = {};
+
+    const dependence = this.#dependencies[name];
+
+    if (!dependence[type]) dependence[type] = {};
+
+    if (!dependence[type][version]) {
+      const module = typeof moduleOrPath !== 'string' ? moduleOrPath : await import(moduleOrPath);
+      dependence[type][version] = module;
     }
   }
 
