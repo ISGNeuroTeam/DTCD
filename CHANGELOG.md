@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - new `appID` prop for unique identification
 - new `installDependence()` method
 
+### Changed
+
+- some `getPlugin()` method improvements
+
 ## [0.18.0]
 
 ### Added

@@ -317,22 +317,43 @@ export default class Application {
 
     if (typeof octetCount !== 'number') throw new Error('OctetCount should be number');
 
-    let requestPlugin = this.#plugins.find(plg => plg.name === name && plg.version === version);
+    const plugins = this.#plugins.filter(p => p.name === name);
 
-    if (octetCount <= 0) {
-      if (requestPlugin) {
-        return requestPlugin?.plugin;
-      } else {
-        throw new Error(`Plugin ${name} ${version} not found`);
-      }
-    }
+    if (plugins.length <= 0) throw new Error(`Plugin "${name}" not found`);
 
-    if (requestPlugin) return requestPlugin?.plugin;
+    plugins.push(...[
+      { version: '0.9.0' },
+      { version: '0.10.0' },
+      { version: '0.10.5' },
+      { version: '0.10.15' },
+    ]);
 
-    const [major, minor, micro] = splitVersion(version);
+    plugins.sort((a, b) => {
+      const [aMajor, aMinor, aMicro] = splitVersion(a.version);
+      const [bMajor, bMinor, bMicro] = splitVersion(b.version);
 
-    const similarPlugins = this.#plugins.filter(plugin => {
-      if (plugin.name === name) {
+      if (aMajor > bMajor) return 1;
+      if (aMajor < bMajor) return -1;
+
+      if (aMinor > bMinor) return 1;
+      if (aMinor < bMinor) return -1;
+
+      if (aMicro > bMicro) return 1;
+      if (aMicro < bMicro) return -1;
+
+      return 0;
+    });
+
+    let requestPlugin = octetCount < 0
+      ? plugins.pop()
+      : plugins.find(p => p.version === version);
+
+    if (octetCount > 0 && requestPlugin) return requestPlugin?.plugin;
+
+    if (octetCount > 0 && !requestPlugin) {
+      const [major, minor, micro] = splitVersion(version);
+
+      const similarPlugins = plugins.filter(plugin => {
         const [pMajor, pMinor, pMicro] = splitVersion(plugin.version);
 
         if (pMajor !== major) return false;
@@ -343,32 +364,14 @@ export default class Application {
         if (checkMicro || checkMinor) return true;
 
         return false;
-      }
+      });
 
-      return false;
-    });
-
-    similarPlugins.sort((a, b) => {
-      const [, aMinor, aMicro] = splitVersion(a.version);
-      const [, bMinor, bMicro] = splitVersion(b.version);
-
-      if (aMinor > bMinor) return 1;
-      if (aMinor < bMinor) return -1;
-
-      if (aMinor === bMinor) {
-        if (aMicro > bMicro) return 1;
-        if (aMicro < bMicro) return -1;
-        return 0;
-      }
-    });
-
-    requestPlugin = similarPlugins.pop();
-
-    if (requestPlugin) {
-      return requestPlugin?.plugin;
-    } else {
-      throw new Error(`Plugin ${name} ${version} not found`);
+      requestPlugin = similarPlugins.pop();
     }
+
+    if (!requestPlugin) throw new Error(`Plugin "${name}" v${version} not found`);
+
+    return requestPlugin?.plugin;
   }
 
   getExtensions(targetName) {
