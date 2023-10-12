@@ -321,13 +321,6 @@ export default class Application {
 
     if (plugins.length <= 0) throw new Error(`Plugin "${name}" not found`);
 
-    plugins.push(...[
-      { version: '0.9.0' },
-      { version: '0.10.0' },
-      { version: '0.10.5' },
-      { version: '0.10.15' },
-    ]);
-
     plugins.sort((a, b) => {
       const [aMajor, aMinor, aMicro] = splitVersion(a.version);
       const [bMajor, bMinor, bMicro] = splitVersion(b.version);
