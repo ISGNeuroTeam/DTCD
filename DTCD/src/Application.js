@@ -40,24 +40,24 @@ export default class Application {
 
       await this.#fillDependencies();
 
-      let systems = this.#plugins.filter(plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem');
+      const systems = this.#plugins.filter(plg => plg.type === 'core' && plg.name !== 'WorkspaceSystem');
 
       systems.push(
         this.#plugins.filter(plg => plg.name === 'WorkspaceSystem').reduce((a, b) => (a.version > b.version ? a : b))
       );
 
-      systems = systems.sort((prevPlg, nextPlg) => nextPlg.priority - prevPlg.priority);
+      systems.sort((a, b) => b.priority - a.priority);
 
-      for (let i = 0; i < systems.length; i++) {
-        const { name, version } = systems[i];
+      for (const system of systems) {
+        const { name, version } = system;
         await this.#installSystem({ name, version });
       }
 
       document.getElementById('loader').remove();
     } catch (error) {
-      document.getElementsByClassName('Loader_Text')[0].innerHTML =
+      document.getElementById('loader-text').innerHTML =
         'Что-то пошло не так, попробуйте обновить страницу или обратитесь к администратору...';
-      console.error(error);
+      throw error;
     }
   }
 

@@ -11,10 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - new `appID` prop for unique identification
 - new `installDependence()` method
+- integration with Keycloak SSO service
 
 ### Changed
 
 - some `getPlugin()` method improvements
+
+### Removed
+
+- authpage config from docs
 
 ## [0.18.0]
 
