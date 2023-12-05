@@ -36,6 +36,8 @@ It's an application for creating configurable web interfaces over [OT.Platform](
 
 In order to install DTCD firstly you need to deploy _complex_rest_ with it's plugins: _complex_rest_dtcd_utils_, _complex_rest_dtcd_jobsmanager_, _complex_rest_dtcd_supergraph_, _complex_rest_dtcd_workspaces_. How to deploy _complex_rest_ and plugins you can see in these repositories listed above in prerequisites section.
 
+Some application settings are specified in the corresponding [dtcd_app_config.json](/docs/dtcd_app_config.json) config file
+
 1. Build DTCD application:
 
    ```
@@ -46,6 +48,7 @@ In order to install DTCD firstly you need to deploy _complex_rest_ with it's plu
 3. Build all DTCD plugins listed in prerequisites above and move them to _dtcd_utils_ plugins directory of complex_rest. This is the required minimum of plugins you need to work with DTCD.
 4. Put [pages](/docs/pages/) folder into _dtcd_utils_ plugin of _complex_rest_.
 5. Put [Design_objects.json](/docs/Design_objects.json) file into _dtcd_utils_ plugin root directory.
+6. Put [dtcd_app_config.json](/docs/dtcd_app_config.json) file in a convenient place, for example, into _dtcd_utils_ plugin root directory.
 6. Serve application with nginx web server. You can see the [template](/docs/nginx_config.conf.template) of config.
 
 ## Running the tests
@@ -63,7 +66,7 @@ make pack
 ## Clear dependencies
 
 ```
-make clear
+make clean
 ```
 
 ## Deployment

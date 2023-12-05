@@ -1,0 +1,7 @@
+{
+  "keycloak": {
+    "url": "<KEYCLOAK_SERVER_URL>",
+    "realm": "<KEYCLOAK_REALM",
+    "clientId": "<KEYCLOAK_REALM_CLIENT>"
+  }
+}

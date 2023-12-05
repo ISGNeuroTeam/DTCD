@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - new `appID` prop for unique identification
 - new `installDependence()` method
 - integration with Keycloak SSO service
+- description and instructions for `dtcd_app_config.json` configuration file
 
 ### Changed
 
 - some `getPlugin()` method improvements
+- nginx server confg template
 
 ### Removed
 

@@ -1,18 +1,23 @@
 server {
     listen _PORT_;
-    server_name     _DOMAIN_NAME_;
-    charset     utf-8;
+    server_name _DOMAIN_NAME_;
+    charset utf-8;
 
     root _PATH_TO_DTCD_PUBLIC_DIRECTORY_;
 
     location /plugins {
         alias _PATH_TO_DTCD_PLUGINS_DIRECTORY_;
-	    autoindex on;
+        autoindex on;
+    }
+
+    location /app_config {
+        alias _PATH_TO_dtcd_app_config.json_FILE_;
+        autoindex on;
     }
 
     location /rawPrimitives {
         alias _PATH_TO_DTCD_rawPrimitives_DIRECTORY_;
-	    autoindex on;
+        autoindex on;
     }
 
     location / {
@@ -66,5 +71,4 @@ server {
     location /id_generator/v1/ {
         proxy_pass _URL_TO_COMPLEX_REST_/id_generator/v1/;
     }
-
 }
